@@ -1,3 +1,16 @@
+# Micro:Bit Streaming Events
+
+# Deployment
+## Initially:
+1) Create
+
+## After:
+1) Make sure the env vars are present in github settings look at deploy.yaml where they are used:
+ - AWS_ACCESS_KEY_ID
+ - AWS_SECRET_ACCESS_KEY
+ - AWS_DEFAULT_REGION
+2) make deploy
+
 
 # Welcome to your CDK Python project!
 
