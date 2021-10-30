@@ -16,7 +16,7 @@ def put_record(event):
         DeliveryStreamName="firehose-develop-raw-delivery-stream",
         Record={"Data": data},
     )
-    print(response)
+    print(event)
     return response
 
 
@@ -68,7 +68,6 @@ def main():
                 event[line_list[0]] = line_list[1]
             else:
                 # print(event)
-                event = {}
                 # print('-'*100)
                 put_record(event)
 
