@@ -1,10 +1,10 @@
-from data_platform.data_lake.base import BaseDataLakeBucket, DataLakeLayer
+from data_lake.base import BaseDataLakeBucket, DataLakeLayer
 from aws_cdk import core
 from aws_cdk import (
     aws_s3 as s3,
 )
 
-from data_platform import active_environment
+from microbit import active_environment
 
 
 class DataLakeStack(core.Stack):
@@ -30,13 +30,11 @@ class DataLakeStack(core.Stack):
             enabled=True,
         )
 
-        # # Data Lake Processed
-        # self.data_lake_processed_bucket = BaseDataLakeBucket(
-        #     self,
-        #     deploy_env=self.deploy_env,
-        #     layer=DataLakeLayer.PROCESSED
-        # )
-        #
+        # Data Lake Processed
+        self.data_lake_processed_bucket = BaseDataLakeBucket(
+            self, deploy_env=self.deploy_env, layer=DataLakeLayer.PROCESSED
+        )
+
         # # Data Lake Aggregated
         # self.data_lake_aggregated_bucket = BaseDataLakeBucket(
         #     self,

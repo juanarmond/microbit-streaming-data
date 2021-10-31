@@ -4,12 +4,12 @@ from aws_cdk import (
     aws_s3 as s3,
 )
 
-from data_platform.environment import Environment
+from environment import Environment
 
 
 class DataLakeLayer(Enum):
     RAW = "raw"
-    # PROCESSED = 'processed'
+    PROCESSED = "processed"
     # AGGREGATED = 'aggregated'
 
 
