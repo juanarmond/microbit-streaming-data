@@ -1,71 +1,50 @@
-# Micro:Bit Streaming Events
+# Micro:Bit Streaming Data
 
-# Deployment
-## Initially:
-1) Create
+![](result.png)
 
-## After:
-1) Make sure the env vars are present in github settings look at deploy.yaml where they are used:
- - AWS_ACCESS_KEY_ID
- - AWS_SECRET_ACCESS_KEY
- - AWS_DEFAULT_REGION
-2) make deploy
+## Objective
+I will learn how to assemble and how to capture and stream all real-time data into AWS. 
+Also, I want to use this data to create a visual data exploration.
 
+## Description
+Using the BBC micro:bit too built an autonomous car and another micro:bit to be a receiver to capture all raw data 
+generated from the gyroscope, proximity sensor, line follow sensor, power consumption and velocity. 
+These raw data will be streamed into AWS to explore and visualize.
 
-# Welcome to your CDK Python project!
+## Installation
 
-This is a blank project for Python development with CDK.
+### Requirements:
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
-
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
-
-To manually create a virtualenv on MacOS and Linux:
-
+1) Setup your IAM User credentials
+- ```~/.aws/config```
 ```
+   [profile my_aws_profile]
+   region = us-east-1
+   output = yaml
+```
+  - ```~/.aws/credentials```
+```
+   [profile my_aws_profile]
+   aws_access_key_id = <my_access_key_id> 
+   aws_secret_access_key = <my_secret_access_key>
+ ```
+2) Manually create a virtualenv on MacOS and Linux
+```shell script
 $ python3 -m venv .venv
 ```
-
-After the init process completes and the virtualenv is created, you can use the following
+3) After the init process completes and the virtualenv is created, you can use the following
 step to activate your virtualenv.
-
-```
+```shell script
 $ source .venv/bin/activate
 ```
-
-If you are a Windows platform, you would activate the virtualenv like this:
-
-```
-% .venv\Scripts\activate.bat
-```
-
-Once the virtualenv is activated, you can install the required dependencies.
-
-```
+4) Once the virtualenv is activated, you can install the required dependencies.
+```shell script
 $ pip install -r requirements.txt
 ```
 
-At this point you can now synthesize the CloudFormation template for this code.
-
-```
-$ cdk synth
-```
-
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
-
-## Useful commands
-
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
-
-Enjoy!
+### Environment Secrets:
+1) Make sure the env vars are present in GitHub settings look at deploy.yaml where they are used:
+ - **AWS_ACCESS_KEY_ID**
+ - **AWS_SECRET_ACCESS_KEY**
+ - **AWS_DEFAULT_REGION**
+2) Make deploy
