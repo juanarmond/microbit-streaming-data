@@ -41,6 +41,13 @@ $ source .venv/bin/activate
 ```shell script
 $ pip install -r requirements.txt
 ```
+5) Microbit Files
+Inside the folder microbit_files contains the code for the autonomous car and the receiver.
+Please go to the https://makecode.microbit.org/ follow the instruction to connect the microbit.
+Then copy and past the code to download to each microbit.
+
+![](makecode.png)
+
 
 ### Environment Secrets:
 1) Make sure the env vars are present in GitHub settings look at deploy.yaml where they are used:
