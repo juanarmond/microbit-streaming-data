@@ -8,5 +8,9 @@ from microbit.glue_catalog.stack import GlueCatalogStack
 app = core.App()
 data_lake = DataLakeStack(app)
 kinesis = KinesisStack(app, data_lake_raw_bucket=data_lake.data_lake_raw_bucket)
-glue_catalog = GlueCatalogStack(app, raw_data_lake_bucket=data_lake.data_lake_raw_bucket, processed_data_lake_bucket=data_lake.data_lake_processed_bucket)
+glue_catalog = GlueCatalogStack(
+    app,
+    raw_data_lake_bucket=data_lake.data_lake_raw_bucket,
+    processed_data_lake_bucket=data_lake.data_lake_processed_bucket,
+)
 app.synth()
