@@ -1,9 +1,8 @@
-import os
-
 from aws_cdk import core
 from aws_cdk import aws_redshift as redshift, aws_ec2 as ec2, aws_iam as iam
 from microbit.data_lake.base import BaseDataLakeBucket
 from microbit.common_stack import CommonStack
+from microbit import active_environment
 
 
 class SpectrumRole(iam.Role):
@@ -14,7 +13,7 @@ class SpectrumRole(iam.Role):
         data_lake_processed: BaseDataLakeBucket,
         **kwargs,
     ) -> None:
-        self.deploy_env = os.environ["ENVIRONMENT"]
+        self.deploy_env = active_environment
         self.data_lake_raw = data_lake_raw
         self.data_lake_processed = data_lake_processed
 
@@ -56,9 +55,9 @@ class RedshiftStack(core.Stack):
     ) -> None:
         self.common_stack = common_stack
         self.data_lake_raw = data_lake_raw
-        self.deploy_env = os.environ["ENVIRONMENT"]
+        self.deploy_env = active_environment
         self.data_lake_processed = data_lake_processed
-        super().__init__(scope, id=f"{self.deploy_env}-redshift-stack", **kwargs)
+        super().__init__(scope, id=f"{self.deploy_env.value}-redshift-stack", **kwargs)
 
         self.redshift_sg = ec2.SecurityGroup(
             self,
@@ -85,7 +84,7 @@ class RedshiftStack(core.Stack):
             vpc=self.common_stack.custom_vpc,
             cluster_type=redshift.ClusterType.MULTI_NODE,
             node_type=redshift.NodeType.DC2_LARGE,
-            default_database_name="dw",
+            default_database_name="microbit",
             number_of_nodes=2,
             removal_policy=core.RemovalPolicy.DESTROY,
             master_user=redshift.Login(master_username="admin"),

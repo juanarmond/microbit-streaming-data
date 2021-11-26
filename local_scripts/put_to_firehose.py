@@ -13,12 +13,12 @@ client = boto3.client("firehose")
 
 
 def put_record(data):
-    # data = json.dumps(data) + "\n"
+    print(data)
+    data = json.dumps(data) + "\n"
     response = client.put_record(
         DeliveryStreamName="firehose-develop-raw-delivery-stream",
         Record={"Data": data},
     )
-    print(data)
     return response
 
 
