@@ -19,15 +19,15 @@ class SpectrumRole(iam.Role):
 
         super().__init__(
             scope,
-            id=f"iam-{self.deploy_env}-redshift-spectrum-role",
+            id=f"iam-{self.deploy_env.value}-redshift-spectrum-role",
             assumed_by=iam.ServicePrincipal("redshift.amazonaws.com"),
             description="Role to allow Redshift to access data lake using spectrum",
         )
 
         policy = iam.Policy(
             scope,
-            id=f"iam-{self.deploy_env}-redshift-spectrum-policy",
-            policy_name=f"iam-{self.deploy_env}-redshift-spectrum-policy",
+            id=f"iam-{self.deploy_env.value}-redshift-spectrum-policy",
+            policy_name=f"iam-{self.deploy_env.value}-redshift-spectrum-policy",
             statements=[
                 iam.PolicyStatement(actions=["glue:*", "athena:*"], resources=["*"]),
                 iam.PolicyStatement(
@@ -61,10 +61,10 @@ class RedshiftStack(core.Stack):
 
         self.redshift_sg = ec2.SecurityGroup(
             self,
-            f"redshift-{self.deploy_env}-sg",
+            f"redshift-{self.deploy_env.value}-sg",
             vpc=self.common_stack.custom_vpc,
             allow_all_outbound=True,
-            security_group_name=f"redshift-{self.deploy_env}-sg",
+            security_group_name=f"redshift-{self.deploy_env.value}-sg",
         )
 
         self.redshift_sg.add_ingress_rule(
@@ -79,8 +79,8 @@ class RedshiftStack(core.Stack):
 
         self.redshift_cluster = redshift.Cluster(
             self,
-            f"microbit-{self.deploy_env}-redshift",
-            cluster_name=f"microbit-{self.deploy_env}-redshift",
+            f"microbit-{self.deploy_env.value}-redshift",
+            cluster_name=f"microbit-{self.deploy_env.value}-redshift",
             vpc=self.common_stack.custom_vpc,
             cluster_type=redshift.ClusterType.MULTI_NODE,
             node_type=redshift.NodeType.DC2_LARGE,
