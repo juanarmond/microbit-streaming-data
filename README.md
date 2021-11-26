@@ -29,6 +29,7 @@ the micro:bit.
 These are all the data collected and transmitted to be ingested into AWS S3 a in a 
 JSON format.
 * Device Serial Number
+* Time
 * Acceleration (mg) X
 * Acceleration (mg) Y
 * Acceleration (mg) Z
