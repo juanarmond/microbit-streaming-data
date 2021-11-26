@@ -2,6 +2,7 @@
 
 from aws_cdk import core
 from microbit.data_lake.stack import DataLakeStack
+from microbit.common_stack import CommonStack
 from microbit.kinesis.stack import KinesisStack
 from microbit.glue_catalog.stack import GlueCatalogStack
 from microbit.redshift.stack import RedshiftStack

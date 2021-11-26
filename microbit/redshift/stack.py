@@ -89,7 +89,7 @@ class RedshiftStack(core.Stack):
 
         self.redshift_cluster = redshift.Cluster(
             self,
-            f"belisco-{self.deploy_env}-redshift",
+            f"microbit-{self.deploy_env}-redshift",
             cluster_name=f"microbit-{self.deploy_env}-redshift",
             vpc=self.common_stack.custom_vpc,
             cluster_type=redshift.ClusterType.MULTI_NODE,
