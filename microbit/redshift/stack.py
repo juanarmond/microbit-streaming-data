@@ -3,16 +3,7 @@ import os
 from aws_cdk import core
 from aws_cdk import aws_redshift as redshift, aws_ec2 as ec2, aws_iam as iam
 from microbit.data_lake.base import BaseDataLakeBucket
-
-# from microbit.common_stack import CommonStack
-
-"""
-CREATE EXTERNAL SCHEMA data_lake_raw
-FROM DATA CATALOG
-DATABASE 'glue_belisco_develop_data_lake_raw'
-REGION 'us-east-1'
-IAM_ROLE 'arn:aws:iam::820187792016:role/develop-redshift-stack-iamdevelopredshiftspectrumr-SMTW4PNGK8YI'
-"""
+from microbit.common_stack import CommonStack
 
 
 class SpectrumRole(iam.Role):
@@ -60,10 +51,10 @@ class RedshiftStack(core.Stack):
         scope: core.Construct,
         data_lake_raw: BaseDataLakeBucket,
         data_lake_processed: BaseDataLakeBucket,
-        # common_stack: CommonStack,
+        common_stack: CommonStack,
         **kwargs,
     ) -> None:
-        # self.common_stack = common_stack
+        self.common_stack = common_stack
         self.data_lake_raw = data_lake_raw
         self.deploy_env = os.environ["ENVIRONMENT"]
         self.data_lake_processed = data_lake_processed
