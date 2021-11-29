@@ -3,7 +3,6 @@ from aws_cdk import (
     aws_glue as glue,
     aws_iam as iam,
 )
-from microbit import Environment
 from microbit.data_lake.base import BaseDataLakeBucket
 
 

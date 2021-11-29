@@ -78,8 +78,9 @@ These are the AWS services used and a why I am using it.
 
 * Kinesis Data Firehose - stream the real-time data into Amazon S3.
 * S3 - it stores the real-time data to be used.
-* Glue Crawler - it is a cron schedule that is set to every 5 minutes populate the Glue Data Catalog with tables
-* Glue Data Catalog - it indexes and creates the database schema.
+* Glue
+  * Crawler - it is a cron schedule that is set to every 5 minutes populate the Glue Data Catalog with tables
+  * Glue Data Catalog - it indexes and creates the database schema.
 * Athena - is an interactive query service that analyze data by connecting to Glue Data Catalog to store and retrieve 
 table metadata from the Amazon S3 data.
 * 
