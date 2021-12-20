@@ -55,7 +55,7 @@ class LambdaFunctionsStack(cdk.Stack):
         **kwargs,
     ) -> None:
         self.deploy_env = active_environment
-        self.data_lake_processed_bucket = processed_data_lake_bucket
+        self.data_lake_processed = processed_data_lake_bucket
         super().__init__(scope, construct_id, **kwargs)
 
         fn = _lambda.Function(
@@ -65,26 +65,5 @@ class LambdaFunctionsStack(cdk.Stack):
             timeout=cdk.Duration.seconds(amount=30),
             handler="lambda_handler.handler",
             code=_lambda.Code.from_asset("microbit/lambda_functions/functions"),
-        )
-
-        fn.add_to_role_policy(
-            statement=iam.PolicyStatement(
-            effect=iam.Effect.ALLOW,
-            actions=[
-                "s3:PutObject",
-                "s3:ListBucket",
-                "s3:PutObjectAcl"
-            ],
-            resources=[
-                self.data_lake_processed_bucket.bucket_arn,
-                f"{self.data_lake_processed_bucket.bucket_arn}/*"
-            ]
-        ))
-
-    @property
-    def lambda_functions_role(self):
-        return LambdaRole(
-            self,
-            deploy_env=self.deploy_env,
-            data_lake_processed_bucket=self.data_lake_processed_bucket,
+            role=LambdaRole(self, self.data_lake_processed),
         )
