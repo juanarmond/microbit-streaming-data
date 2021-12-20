@@ -68,7 +68,7 @@ class LambdaFunctionsStack(cdk.Stack):
         )
 
         fn.add_to_role_policy(
-            statement=self.lambda_functions_role.role_arn
+            statement=self.lambda_functions_role
         )
 
     @property
