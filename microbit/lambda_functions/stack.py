@@ -6,8 +6,8 @@ class LambdaFunctionsStack(cdk.Stack):
     def __init__(
         self,
         scope: cdk.Construct,
-        processed_data_lake_bucket: BaseDataLakeBucket,
         construct_id: str,
+        processed_data_lake_bucket: BaseDataLakeBucket,
         **kwargs,
     ) -> None:
         self.processed_data_lake_bucket = processed_data_lake_bucket
