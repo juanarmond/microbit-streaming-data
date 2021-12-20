@@ -1,6 +1,6 @@
-from aws_cdk import core as cdk, aws_lambda as _lambda, aws_s3 as s3, aws_iam as iam
+from aws_cdk import core as cdk, aws_lambda as _lambda, aws_iam as iam
 from microbit.data_lake.base import BaseDataLakeBucket
-
+from microbit import active_environment
 
 class LambdaFunctionsStack(cdk.Stack):
     def __init__(
@@ -10,8 +10,8 @@ class LambdaFunctionsStack(cdk.Stack):
         processed_data_lake_bucket: BaseDataLakeBucket,
         **kwargs,
     ) -> None:
+        self.deploy_env = active_environment
         self.processed_data_lake_bucket = processed_data_lake_bucket
-
         super().__init__(scope, construct_id, **kwargs)
 
         fn = _lambda.Function(
