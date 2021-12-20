@@ -55,7 +55,7 @@ class LambdaFunctionsStack(cdk.Stack):
         **kwargs,
     ) -> None:
         self.deploy_env = active_environment
-        self.processed_data_lake_bucket = processed_data_lake_bucket
+        self.data_lake_processed_bucket = processed_data_lake_bucket
         super().__init__(scope, construct_id, **kwargs)
 
         fn = _lambda.Function(
