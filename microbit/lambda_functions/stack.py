@@ -7,11 +7,11 @@ class LambdaRole(iam.Role):
     def __init__(
         self,
         scope: cdk.Construct,
-        data_lake_processed: BaseDataLakeBucket,
+        data_lake_processed_bucket: BaseDataLakeBucket,
         **kwargs,
     ) -> None:
         self.deploy_env = active_environment
-        self.data_lake_processed = data_lake_processed
+        self.data_lake_processed_bucket = data_lake_processed_bucket
 
         super().__init__(
             scope,
@@ -67,21 +67,8 @@ class LambdaFunctionsStack(cdk.Stack):
             code=_lambda.Code.from_asset("microbit/lambda_functions/functions"),
         )
 
-        # bucket = s3.Bucket(
-        #     scope=self,
-        #     id="bucket-mercado-bitcoin",
-        #     bucket_name="belisco-cripto-milionario",
-        # )
-
         fn.add_to_role_policy(
-            statement=iam.PolicyStatement(
-                effect=iam.Effect.ALLOW,
-                actions=["s3:PutObject", "s3:ListBucket", "s3:PutObjectAcl"],
-                resources=[
-                    self.processed_data_lake_bucket.bucket_arn,
-                    f"{self.processed_data_lake_bucket.bucket_arn}/*",
-                ],
-            )
+            statement=self.lambda_functions_role.role_arn
         )
 
     @property
@@ -89,5 +76,5 @@ class LambdaFunctionsStack(cdk.Stack):
         return LambdaRole(
             self,
             deploy_env=self.deploy_env,
-            data_lake_raw_bucket=self.data_lake_processed_bucket,
+            data_lake_processed_bucket=self.data_lake_processed_bucket,
         )
