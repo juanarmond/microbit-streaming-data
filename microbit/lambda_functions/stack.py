@@ -86,7 +86,7 @@ class LambdaFunctionsStack(cdk.Stack):
             timeout=cdk.Duration.seconds(amount=30),
             handler="lambda_handler.handler",
             # code=_lambda.Code.from_asset("microbit/lambda_functions/functions"),
-            code=_lambda.Code.from_bucket(bucket=self.data_lake_processed, key=self.data_lake_processed),
+            code=_lambda.Code.from_inline(open("microbit/lambda_functions/functions/lambda_handler.py").read()),
             role=LambdaRole(self, self.data_lake_processed),
             security_groups=[self.lambda_sg],
             vpc=self.common_stack.custom_vpc,
