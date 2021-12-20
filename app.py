@@ -17,6 +17,7 @@ lambda_functions = LambdaFunctionsStack(
     app,
     "LambdaFunctionsStack",
     processed_data_lake_bucket=data_lake.data_lake_processed_bucket,
+    common_stack=common_stack,
 )
 # glue_catalog = GlueCatalogStack(
 #     app,
