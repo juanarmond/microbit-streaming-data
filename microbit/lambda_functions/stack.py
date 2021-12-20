@@ -20,7 +20,7 @@ class LambdaFunctionsStack(cdk.Stack):
             runtime=_lambda.Runtime.PYTHON_3_9,
             timeout=cdk.Duration.seconds(amount=30),
             handler="lambda_handler.handler",
-            code=_lambda.Code.from_asset("lambda_functions/functions"),
+            code=_lambda.Code.from_asset("microbit/lambda_functions/functions"),
         )
 
         # bucket = s3.Bucket(
