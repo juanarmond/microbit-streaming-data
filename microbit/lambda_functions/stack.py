@@ -89,6 +89,6 @@ class LambdaFunctionsStack(cdk.Stack):
             code=_lambda.Code.from_inline(open("microbit/lambda_functions/functions/lambda_handler.py").read()),
             role=LambdaRole(self, self.data_lake_processed),
             security_groups=[self.lambda_sg],
-            vpc=self.common_stack.custom_vpc,
-            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
+            # vpc=self.common_stack.custom_vpc,
+            # vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
         )
