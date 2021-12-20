@@ -34,7 +34,7 @@ JSON format.
 * Acceleration (mg) Y
 * Acceleration (mg) Z
 * Tembo
-* Temperature (C)
+* Temperature (°C)
 * Distance Sensor
 * Light Level
 * Sound Level

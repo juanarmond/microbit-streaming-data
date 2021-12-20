@@ -1,5 +1,4 @@
 from aws_cdk import core
-
 from microbit import active_environment
 from microbit.data_lake.base import BaseDataLakeBucket
 from microbit.glue_catalog.base import (

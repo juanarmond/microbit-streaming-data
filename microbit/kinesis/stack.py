@@ -4,7 +4,7 @@ from aws_cdk import (
     aws_iam as iam,
 )
 from microbit import Environment, active_environment
-from data_lake.base import BaseDataLakeBucket
+from microbit.data_lake.base import BaseDataLakeBucket
 
 
 class RawKinesisRole(iam.Role):

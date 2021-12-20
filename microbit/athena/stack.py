@@ -1,4 +1,3 @@
-import os
 from aws_cdk import core
 from microbit import active_environment
 from microbit.athena.base import (

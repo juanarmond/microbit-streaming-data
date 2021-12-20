@@ -54,8 +54,8 @@ class RedshiftStack(core.Stack):
         **kwargs,
     ) -> None:
         self.common_stack = common_stack
-        self.data_lake_raw = data_lake_raw
         self.deploy_env = active_environment
+        self.data_lake_raw = data_lake_raw
         self.data_lake_processed = data_lake_processed
         super().__init__(scope, id=f"{self.deploy_env.value}-redshift-stack", **kwargs)
 

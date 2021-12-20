@@ -56,7 +56,9 @@ class BaseAthenaWorkgroup(athena.CfnWorkGroup):
         self.gb_scanned_cutoff_per_query = gb_scanned_cutoff_per_query
         self.deploy_env = scope.deploy_env
         self.athena_bucket = athena_bucket
-        self.obj_name = f"s3-microbit-{self.deploy_env.value}-data-lake-athena-workgroup"
+        self.obj_name = (
+            f"s3-microbit-{self.deploy_env.value}-data-lake-athena-workgroup"
+        )
         super().__init__(
             scope,
             id=self.obj_name,

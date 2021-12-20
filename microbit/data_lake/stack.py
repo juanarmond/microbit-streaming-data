@@ -1,4 +1,4 @@
-from data_lake.base import BaseDataLakeBucket, DataLakeLayer
+from microbit.data_lake.base import BaseDataLakeBucket, DataLakeLayer
 from aws_cdk import core
 from aws_cdk import (
     aws_s3 as s3,
@@ -12,6 +12,7 @@ class DataLakeStack(core.Stack):
         self.deploy_env = active_environment
         super().__init__(scope, id=f"{self.deploy_env.value}-data-lake-stack", **kwargs)
 
+        # Data Lake Raw
         self.data_lake_raw_bucket = BaseDataLakeBucket(
             self, deploy_env=self.deploy_env, layer=DataLakeLayer.RAW
         )
@@ -34,10 +35,3 @@ class DataLakeStack(core.Stack):
         self.data_lake_processed_bucket = BaseDataLakeBucket(
             self, deploy_env=self.deploy_env, layer=DataLakeLayer.PROCESSED
         )
-
-        # # Data Lake Aggregated
-        # self.data_lake_aggregated_bucket = BaseDataLakeBucket(
-        #     self,
-        #     deploy_env=self.deploy_env,
-        #     layer=DataLakeLayer.AGGREGATED
-        # )

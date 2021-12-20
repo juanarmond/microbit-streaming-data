@@ -4,13 +4,12 @@ from aws_cdk import (
     aws_s3 as s3,
 )
 
-from environment import Environment
+from microbit.environment import Environment
 
 
 class DataLakeLayer(Enum):
     RAW = "raw"
     PROCESSED = "processed"
-    # AGGREGATED = 'aggregated'
 
 
 class BaseDataLakeBucket(s3.Bucket):
