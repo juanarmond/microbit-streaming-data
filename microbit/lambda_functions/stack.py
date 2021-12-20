@@ -1,6 +1,7 @@
-from aws_cdk import core as cdk, aws_lambda as _lambda, aws_iam as iam
+from aws_cdk import core as cdk, aws_lambda as _lambda, aws_iam as iam, aws_ec2 as ec2
 from microbit.data_lake.base import BaseDataLakeBucket
 from microbit import active_environment
+from microbit.common_stack import CommonStack
 
 
 class LambdaRole(iam.Role):
@@ -52,11 +53,31 @@ class LambdaFunctionsStack(cdk.Stack):
         scope: cdk.Construct,
         construct_id: str,
         processed_data_lake_bucket: BaseDataLakeBucket,
+        common_stack: CommonStack,
         **kwargs,
     ) -> None:
+        self.common_stack = common_stack
         self.deploy_env = active_environment
         self.data_lake_processed = processed_data_lake_bucket
         super().__init__(scope, construct_id, **kwargs)
+
+        self.lambda_sg = ec2.SecurityGroup(
+            self,
+            f"redshift-{self.deploy_env.value}-sg",
+            vpc=self.common_stack.custom_vpc,
+            allow_all_outbound=True,
+            security_group_name=f"redshift-{self.deploy_env.value}-sg",
+        )
+
+        self.lambda_sg.add_ingress_rule(
+            peer=ec2.Peer.ipv4("0.0.0.0/0"), connection=ec2.Port.tcp(5439)
+        )
+
+        for subnet in self.common_stack.custom_vpc.private_subnets:
+            self.lambda_sg.add_ingress_rule(
+                peer=ec2.Peer.ipv4(subnet.ipv4_cidr_block),
+                connection=ec2.Port.tcp(5439),
+            )
 
         fn = _lambda.Function(
             scope=self,
@@ -66,4 +87,6 @@ class LambdaFunctionsStack(cdk.Stack):
             handler="lambda_handler.handler",
             code=_lambda.Code.from_asset("microbit/lambda_functions/functions"),
             role=LambdaRole(self, self.data_lake_processed),
+            security_groups=[self.lambda_sg],
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
         )
