@@ -68,8 +68,18 @@ class LambdaFunctionsStack(cdk.Stack):
         )
 
         fn.add_to_role_policy(
-            statement=self.lambda_functions_role
-        )
+            statement=iam.PolicyStatement(
+            effect=iam.Effect.ALLOW,
+            actions=[
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:PutObjectAcl"
+            ],
+            resources=[
+                self.data_lake_processed_bucket.bucket_arn,
+                f"{self.data_lake_processed_bucket.bucket_arn}/*"
+            ]
+        ))
 
     @property
     def lambda_functions_role(self):
