@@ -90,7 +90,7 @@ class LambdaFunctionsStack(cdk.Stack):
             role=LambdaRole(self, self.data_lake_raw, self.data_lake_processed),
         )
 
-    def upload_to_aws(local_file, bucket, s3_file):
+    def upload_to_aws(self, local_file, bucket, s3_file):
         client = boto3.client("lambda-functions")
         try:
             client.upload_file(local_file, bucket, s3_file)
