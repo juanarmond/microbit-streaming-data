@@ -15,7 +15,6 @@ common_stack = CommonStack(app)
 # kinesis = KinesisStack(app, data_lake_raw_bucket=data_lake.data_lake_raw_bucket)
 lambda_functions = LambdaFunctionsStack(
     app,
-    # "lambda-functions-stack",
     data_lake_raw=data_lake.data_lake_raw_bucket,
     data_lake_processed=data_lake.data_lake_processed_bucket,
     common_stack=common_stack,
