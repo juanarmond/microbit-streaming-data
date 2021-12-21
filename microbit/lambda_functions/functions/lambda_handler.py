@@ -15,11 +15,11 @@ def lambda_handler(event, context):
         for content in response.get("Contents", []):
             # print(content.get("Key"))
             key=content.get("Key")
-            obj = client.get_object(Bucket=bucket, Key=key)
-            print(key)
-            with gzip.GzipFile(fileobj=key) as gzipfile:
-                content = gzipfile.read()
-                print(content)
+            obj = client.Object(Bucket=bucket, Key=key)
+            print(obj)
+            # with gzip.GzipFile(fileobj=key) as gzipfile:
+            #     content = gzipfile.read()
+            #     print(content)
         # return response["ContentType"]
     except Exception as e:
         print(e)
