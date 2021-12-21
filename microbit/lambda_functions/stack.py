@@ -96,4 +96,4 @@ class LambdaFunctionsStack(cdk.Stack):
             # vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
         )
 
-        fn.add_to_role_policy(statement=self.LambdaRole.add_policy())
+        fn.add_to_role_policy(statement=LambdaRole(self, self.data_lake_raw, self.data_lake_processed).add_policy())
