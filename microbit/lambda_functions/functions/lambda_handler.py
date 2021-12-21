@@ -10,10 +10,14 @@ def lambda_handler(event, context):
 
     # Get the object from the event and show its content type
     # s3: // s3 - microbit - data - develop - data - lake - raw / atomic_events / date = 2021 - 11 - 26 /
+    bucket = "s3-microbit-data-develop-data-lake-raw"
     try:
-        response = client.list_objects(Bucket="s3-microbit-data-develop-data-lake-raw", Prefix="atomic_events")
+        response = client.list_objects(Bucket=bucket, Prefix="atomic_events")
         for content in response.get("Contents", []):
-            print(content.get("Key"))
+            # print(content.get("Key"))
+            key=content.get("Key")
+            read_stream=client.get_object(Bucket=bucket, Key=key).createReadStream()
+            print(read_stream)
         # return response["ContentType"]
     except Exception as e:
         print(e)
