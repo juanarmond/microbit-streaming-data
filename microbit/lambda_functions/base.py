@@ -21,6 +21,9 @@ class LambdaRole(iam.Role):
             assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"),
             description="Role to allow Lambda to access data lake",
         )
+        self.bucket_arn = self.data_lake_bucket.bucket_arn
+        self.add_policy()
+        self.add_instance_profile()
 
     def add_policy(self):
         policy = iam.Policy(
@@ -47,3 +50,11 @@ class LambdaRole(iam.Role):
             ],
         )
         self.attach_inline_policy(policy)
+
+    def add_instance_profile(self):
+        iam.CfnInstanceProfile(
+            self,
+            id=f"iam-{self.deploy_env.value}-lambda-data-lake-{self.layer.value}-instance-profile",
+            instance_profile_name=f"iam-{self.deploy_env.value}-lambda-data-lake-{self.layer.value}-instance-profile",
+            roles=[self.role_name],
+        )
