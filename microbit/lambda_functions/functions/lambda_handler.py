@@ -12,6 +12,7 @@ def lambda_handler(event, context):
     bucket = "s3-microbit-data-develop-data-lake-raw"
     try:
         response = client.list_objects(Bucket=bucket, Prefix="atomic_events")
+        print(response)
         for content in response.get("Contents", []):
             # print(content.get("Key"))
             key=content.get("Key")
