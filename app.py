@@ -16,7 +16,8 @@ common_stack = CommonStack(app)
 lambda_functions = LambdaFunctionsStack(
     app,
     # "lambda-functions-stack",
-    # processed_data_lake_bucket=data_lake.data_lake_processed_bucket,
+    data_lake_raw=data_lake.data_lake_raw_bucket,
+    data_lake_processed=data_lake.data_lake_processed_bucket,
     common_stack=common_stack,
 )
 # glue_catalog = GlueCatalogStack(
