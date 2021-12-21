@@ -92,10 +92,8 @@ class LambdaFunctionsStack(cdk.Stack):
             handler="lambda_handler.handler",
             # code=_lambda.Code.from_asset("microbit/lambda_functions/functions"),
             code=_lambda.Code.from_inline(open("microbit/lambda_functions/functions/lambda_handler.py").read()),
-            # role=[LambdaRole(self, self.data_lake_raw, self.data_lake_processed)],
+            role=LambdaRole(self, self.data_lake_raw, self.data_lake_processed),
             # security_groups=[self.lambda_sg],
             # vpc=self.common_stack.custom_vpc,
             # vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
         )
-
-        fn.add_to_role_policy(statement=LambdaRole(self, self.data_lake_raw, self.data_lake_processed).add_policy())
