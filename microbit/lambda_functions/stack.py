@@ -2,9 +2,7 @@ from aws_cdk import core as cdk, aws_lambda as _lambda
 from microbit.data_lake.base import BaseDataLakeBucket
 from microbit import active_environment
 from microbit.common_stack import CommonStack
-from microbit.lambda_functions.base import (
-    LambdaRole,
-)
+from microbit.lambda_functions.base import LambdaRole
 
 
 class LambdaFunctionsStack(cdk.Stack):
@@ -27,8 +25,7 @@ class LambdaFunctionsStack(cdk.Stack):
             id=f"{self.deploy_env.value}-lambda-functions",
             runtime=_lambda.Runtime.PYTHON_3_9,
             timeout=cdk.Duration.seconds(amount=30),
-            handler="lambda_handler.handler",
-            # code=_lambda.Code.from_bucket(bucket=self.lambda_bucket, key='lambda_handler.py'),
+            handler="index.lambda_handler",
             code=_lambda.Code.from_inline(open("microbit/lambda_functions/functions/lambda_handler.py").read()),
             role=LambdaRole(self, self.data_lake_raw, self.data_lake_processed),
         )
