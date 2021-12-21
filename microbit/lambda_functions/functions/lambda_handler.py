@@ -1,6 +1,5 @@
+import gzip
 import boto3
-
-print("Loading function")
 
 client = boto3.client('s3')
 
@@ -16,8 +15,10 @@ def lambda_handler(event, context):
         for content in response.get("Contents", []):
             # print(content.get("Key"))
             key=content.get("Key")
-            read_stream=client.get_object(Bucket=bucket, Key=key)
-            print(read_stream)
+            obj = client.Object(bucket_name=bucket, key=key)
+            with gzip.GzipFile(fileobj=obj.get()) as gzipfile:
+                content = gzipfile.read()
+                print(content)
         # return response["ContentType"]
     except Exception as e:
         print(e)
