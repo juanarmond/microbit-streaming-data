@@ -16,7 +16,7 @@ def lambda_handler(event, context):
         for content in response.get("Contents", []):
             # print(content.get("Key"))
             key=content.get("Key")
-            read_stream=client.get_object(Bucket=bucket, Key=key).createReadStream()
+            read_stream=client.get_object(Bucket=bucket, Key=key)
             print(read_stream)
         # return response["ContentType"]
     except Exception as e:
