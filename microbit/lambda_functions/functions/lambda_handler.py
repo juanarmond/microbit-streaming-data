@@ -1,5 +1,6 @@
 import boto3, gzip
 from io import BytesIO
+import json
 
 client = boto3.client('s3')
 
@@ -14,12 +15,13 @@ def lambda_handler(event, context):
         response = client.list_objects(Bucket=bucket, Prefix="atomic_events")
         for content in response.get("Contents", []):
             # print(content.get("Key"))
-            key=content.get("Key")
+            key = content.get("Key")
             obj = client.get_object(Bucket=bucket, Key=key)
             input_gz_content = obj['Body'].read()
             with gzip.GzipFile(fileobj=BytesIO(input_gz_content)) as gzipfile:
                 content = gzipfile.read()
-                print(content)
+                dic = json.loads(content)
+                print(dic)
         # return response["ContentType"]
     except Exception as e:
         print(e)
