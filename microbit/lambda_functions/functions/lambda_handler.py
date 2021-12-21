@@ -1,5 +1,5 @@
 import boto3, gzip
-
+from io import BytesIOfi
 
 client = boto3.client('s3')
 
@@ -15,8 +15,8 @@ def lambda_handler(event, context):
         for content in response.get("Contents", []):
             # print(content.get("Key"))
             key=content.get("Key")
-            obj = client.Object(bucket_name=bucket, key=key)
-            with gzip.GzipFile(fileobj=obj.get()) as gzipfile:
+            obj = client.get_object(bucket_name=bucket, key=key)
+            with gzip.GzipFile(fileobj=BytesIO(obj.get())) as gzipfile:
                 content = gzipfile.read()
                 print(content)
         # return response["ContentType"]
