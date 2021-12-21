@@ -8,24 +8,26 @@ class LambdaRole(iam.Role):
     def __init__(
         self,
         scope: cdk.Construct,
-        data_lake_processed_bucket: BaseDataLakeBucket,
+        data_lake_raw: BaseDataLakeBucket,
+        data_lake_processed: BaseDataLakeBucket,
         **kwargs,
     ) -> None:
         self.deploy_env = active_environment
-        self.data_lake_processed_bucket = data_lake_processed_bucket
+        self.data_lake_raw = data_lake_raw
+        self.data_lake_processed = data_lake_processed
 
         super().__init__(
             scope,
             id=f"iam-{self.deploy_env.value}-lambda-functions-role",
             assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"),
-            description="Role to allow Lambda to save data to data lake processed",
+            description="Role to allow Lambda to access data lake",
         )
 
     def add_policy(self):
         policy = iam.Policy(
             self,
-            id=f"iam-{self.deploy_env.value}-data-lake-processed-lambda-functions-policy",
-            policy_name=f"iam-{self.deploy_env.value}-data-lake-processed-lambda-functions-policy",
+            id=f"iam-{self.deploy_env.value}-lambda-functions-policy",
+            policy_name=f"iam-{self.deploy_env.value}-lambda-functions-policy",
             statements=[
                 iam.PolicyStatement(
                     actions=[
@@ -37,8 +39,10 @@ class LambdaRole(iam.Role):
                         "s3:PutObject",
                     ],
                     resources=[
-                        self.data_lake_processed_bucket.bucket_arn,
-                        f"{self.data_lake_processed_bucket.bucket_arn}/*",
+                        self.data_lake_raw.bucket_arn,
+                        f"{self.data_lake_raw.bucket_arn}/*",
+                        self.data_lake_processed.bucket_arn,
+                        f"{self.data_lake_processed.bucket_arn}/*",
                     ],
                 )
             ],
@@ -61,23 +65,23 @@ class LambdaFunctionsStack(cdk.Stack):
         self.data_lake_processed = processed_data_lake_bucket
         super().__init__(scope, construct_id, **kwargs)
 
-        self.lambda_sg = ec2.SecurityGroup(
-            self,
-            f"redshift-{self.deploy_env.value}-sg",
-            vpc=self.common_stack.custom_vpc,
-            allow_all_outbound=True,
-            security_group_name=f"redshift-{self.deploy_env.value}-sg",
-        )
-
-        self.lambda_sg.add_ingress_rule(
-            peer=ec2.Peer.ipv4("0.0.0.0/0"), connection=ec2.Port.tcp(5439)
-        )
-
-        for subnet in self.common_stack.custom_vpc.private_subnets:
-            self.lambda_sg.add_ingress_rule(
-                peer=ec2.Peer.ipv4(subnet.ipv4_cidr_block),
-                connection=ec2.Port.tcp(5439),
-            )
+        # self.lambda_sg = ec2.SecurityGroup(
+        #     self,
+        #     f"redshift-{self.deploy_env.value}-sg",
+        #     vpc=self.common_stack.custom_vpc,
+        #     allow_all_outbound=True,
+        #     security_group_name=f"redshift-{self.deploy_env.value}-sg",
+        # )
+        #
+        # self.lambda_sg.add_ingress_rule(
+        #     peer=ec2.Peer.ipv4("0.0.0.0/0"), connection=ec2.Port.tcp(5439)
+        # )
+        #
+        # for subnet in self.common_stack.custom_vpc.private_subnets:
+        #     self.lambda_sg.add_ingress_rule(
+        #         peer=ec2.Peer.ipv4(subnet.ipv4_cidr_block),
+        #         connection=ec2.Port.tcp(5439),
+        #     )
 
         fn = _lambda.Function(
             scope=self,
@@ -88,7 +92,7 @@ class LambdaFunctionsStack(cdk.Stack):
             # code=_lambda.Code.from_asset("microbit/lambda_functions/functions"),
             code=_lambda.Code.from_inline(open("microbit/lambda_functions/functions/lambda_handler.py").read()),
             role=LambdaRole(self, self.data_lake_processed),
-            security_groups=[self.lambda_sg],
+            # security_groups=[self.lambda_sg],
             # vpc=self.common_stack.custom_vpc,
             # vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
         )
