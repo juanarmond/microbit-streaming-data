@@ -55,7 +55,7 @@ class LambdaFunctionsStack(cdk.Stack):
     def __init__(
         self,
         scope: cdk.Construct,
-        construct_id: str,
+        # construct_id: str,
         processed_data_lake_bucket: BaseDataLakeBucket,
         common_stack: CommonStack,
         **kwargs,
@@ -63,7 +63,7 @@ class LambdaFunctionsStack(cdk.Stack):
         self.common_stack = common_stack
         self.deploy_env = active_environment
         self.data_lake_processed = processed_data_lake_bucket
-        super().__init__(scope, construct_id, **kwargs)
+        super().__init__(scope, id=f"{self.deploy_env.value}-lambda-functions-stack", **kwargs)
 
         # self.lambda_sg = ec2.SecurityGroup(
         #     self,
