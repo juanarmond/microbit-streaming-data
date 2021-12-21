@@ -6,11 +6,11 @@ from microbit.common_stack import CommonStack
 
 class LambdaRole(iam.Role):
     def __init__(
-        self,
-        scope: cdk.Construct,
-        data_lake_raw: BaseDataLakeBucket,
-        data_lake_processed: BaseDataLakeBucket,
-        **kwargs,
+            self,
+            scope: cdk.Construct,
+            data_lake_raw: BaseDataLakeBucket,
+            data_lake_processed: BaseDataLakeBucket,
+            **kwargs,
     ) -> None:
         self.deploy_env = active_environment
         self.data_lake_raw = data_lake_raw
@@ -50,19 +50,18 @@ class LambdaRole(iam.Role):
         self.attach_inline_policy(policy)
 
 
-
 class LambdaFunctionsStack(cdk.Stack):
     def __init__(
-        self,
-        scope: cdk.Construct,
-        # construct_id: str,
-        processed_data_lake_bucket: BaseDataLakeBucket,
-        common_stack: CommonStack,
-        **kwargs,
+            self,
+            scope: cdk.Construct,
+            # construct_id: str,
+            # data_lake_processed: BaseDataLakeBucket,
+            common_stack: CommonStack,
+            **kwargs,
     ) -> None:
         self.common_stack = common_stack
         self.deploy_env = active_environment
-        self.data_lake_processed = processed_data_lake_bucket
+        # self.data_lake_processed = data_lake_processed
         super().__init__(scope, id=f"{self.deploy_env.value}-lambda-functions-stack", **kwargs)
 
         # self.lambda_sg = ec2.SecurityGroup(
@@ -91,8 +90,10 @@ class LambdaFunctionsStack(cdk.Stack):
             handler="lambda_handler.handler",
             # code=_lambda.Code.from_asset("microbit/lambda_functions/functions"),
             code=_lambda.Code.from_inline(open("microbit/lambda_functions/functions/lambda_handler.py").read()),
-            role=LambdaRole(self, self.data_lake_processed),
+            # role=[LambdaRole(self, self.data_lake_raw, self.data_lake_processed)],
             # security_groups=[self.lambda_sg],
             # vpc=self.common_stack.custom_vpc,
             # vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
         )
+
+        fn.add_to_role_policy(statement=self.LambdaRole.add_policy())
