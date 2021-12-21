@@ -17,6 +17,7 @@ def lambda_handler(event, context):
             key=content.get("Key")
             obj = client.get_object(Bucket=bucket, Key=key)
             print(obj)
+            print(obj.get())
             # with gzip.GzipFile(fileobj=BytesIO(obj.get())) as gzipfile:
             #     content = gzipfile.read()
             #     print(content)
