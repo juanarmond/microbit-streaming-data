@@ -1,50 +1,6 @@
-from aws_cdk import core
-from aws_cdk import (
-    aws_s3 as s3,
-    aws_iam as iam
-)
+from aws_cdk import core, aws_iam as iam
 from microbit.data_lake.base import BaseDataLakeBucket
 from microbit import active_environment
-
-
-class BaseLambdaBucket(s3.Bucket):
-    def __init__(self, scope: core.Construct, **kwargs) -> None:
-        self.deploy_env = scope.deploy_env
-        self.obj_name = f"s3-microbit-{self.deploy_env.value}-lambda-functions"
-
-        super().__init__(
-            scope,
-            id=self.obj_name,
-            bucket_name=self.obj_name,
-            removal_policy=core.RemovalPolicy.DESTROY,
-            block_public_access=self.default_block_public_access(),
-            encryption=self.default_encryption(),
-            versioned=True,
-            **kwargs,
-        )
-
-        self.add_lifecycle_rule(expiration=core.Duration.days(60))
-
-    @staticmethod
-    def default_block_public_access():
-        """
-        Block public access by default
-        """
-        block_public_access = s3.BlockPublicAccess(
-            block_public_acls=True,
-            block_public_policy=True,
-            ignore_public_acls=True,
-            restrict_public_buckets=True,
-        )
-        return block_public_access
-
-    @staticmethod
-    def default_encryption():
-        """
-        Enables encryption by default
-        """
-        encryption = s3.BucketEncryption(s3.BucketEncryption.S3_MANAGED)
-        return encryption
 
 
 class LambdaRole(iam.Role):
