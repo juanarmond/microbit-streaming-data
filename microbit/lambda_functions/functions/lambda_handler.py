@@ -2,7 +2,7 @@ import boto3
 
 print("Loading function")
 
-client = boto3.client('data-lake-raw')
+client = boto3.client('s3')
 
 
 def lambda_handler(event, context):
