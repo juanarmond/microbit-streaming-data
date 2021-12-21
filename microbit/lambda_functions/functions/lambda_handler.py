@@ -1,5 +1,5 @@
 import boto3, gzip
-from io import BytesIOfi
+from io import BytesIO
 
 client = boto3.client('s3')
 
