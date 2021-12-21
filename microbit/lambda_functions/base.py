@@ -21,7 +21,6 @@ class LambdaRole(iam.Role):
             assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"),
             description="Role to allow Lambda to access data lake",
         )
-        self.bucket_arn = self.data_lake_bucket.bucket_arn
         self.add_policy()
         self.add_instance_profile()
 
