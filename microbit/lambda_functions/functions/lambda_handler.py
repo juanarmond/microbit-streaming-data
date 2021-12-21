@@ -11,7 +11,7 @@ def lambda_handler(event, context):
     # Get the object from the event and show its content type
     # s3: // s3 - microbit - data - develop - data - lake - raw / atomic_events / date = 2021 - 11 - 26 /
     try:
-        response = s3.list_objects(Bucket=s3, Prefix="atomic_events")
+        response = s3.list_objects(Bucket="s3-microbit-data-develop-data-lake-raw", Prefix="atomic_events")
         for content in response.get("Contents", []):
             print(content.get("Key"))
         # return response["ContentType"]
