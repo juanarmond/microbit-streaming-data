@@ -37,6 +37,7 @@ class LambdaRole(iam.Role):
                         "s3:ListBucket",
                         "s3:ListBucketMultipartUploads",
                         "s3:PutObject",
+                        "s3:PutBucketNotificationConfiguration",
                     ],
                     resources=[
                         self.data_lake_raw.bucket_arn,

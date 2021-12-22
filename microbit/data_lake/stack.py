@@ -38,8 +38,8 @@ class DataLakeStack(core.Stack):
             self, deploy_env=self.deploy_env, layer=DataLakeLayer.PROCESSED
         )
 
-        # create s3 notification for lambda function
-        notification = s3n.LambdaDestination(LambdaFunctionsStack.fn)
-
-        # assign notification for the s3 event type (ex: OBJECT_CREATED)
-        self.data_lake_raw.add_event_notification(s3.EventType.OBJECT_CREATED, notification)
+        # # create s3 notification for lambda function
+        # notification = s3n.LambdaDestination(LambdaFunctionsStack.fn)
+        #
+        # # assign notification for the s3 event type (ex: OBJECT_CREATED)
+        # self.data_lake_raw.add_event_notification(s3.EventType.OBJECT_CREATED, notification)
