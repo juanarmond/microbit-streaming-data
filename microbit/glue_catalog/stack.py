@@ -12,27 +12,27 @@ class GlueCatalogStack(core.Stack):
     def __init__(
         self,
         scope: core.Construct,
-        raw_data_lake_bucket: BaseDataLakeBucket,
-        processed_data_lake_bucket: BaseDataLakeBucket,
+        data_lake_raw: BaseDataLakeBucket,
+        data_lake_processed: BaseDataLakeBucket,
         **kwargs,
     ) -> None:
-        self.raw_data_lake_bucket = raw_data_lake_bucket
-        self.processed_data_lake_bucket = processed_data_lake_bucket
+        self.data_lake_raw = data_lake_raw
+        self.data_lake_processed = data_lake_processed
         self.deploy_env = active_environment
         super().__init__(
             scope, id=f"{self.deploy_env.value}-glue-catalog-stack", **kwargs
         )
 
         self.raw_database = BaseDataLakeGlueDatabase(
-            self, data_lake_bucket=self.raw_data_lake_bucket
+            self, data_lake_bucket=self.data_lake_raw
         )
 
         self.processed_database = BaseDataLakeGlueDatabase(
-            self, data_lake_bucket=self.processed_data_lake_bucket
+            self, data_lake_bucket=self.data_lake_processed
         )
 
         self.role = BaseDataLakeGlueRole(
-            self, data_lake_bucket=self.raw_data_lake_bucket
+            self, data_lake_bucket=self.data_lake_raw
         )
 
         self.atomic_events_crawler = BaseGlueCrawler(
