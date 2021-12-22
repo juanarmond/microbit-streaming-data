@@ -24,7 +24,7 @@ class LambdaFunctionsStack(cdk.Stack):
             scope=self,
             id=f"{self.deploy_env.value}-lambda-functions",
             runtime=_lambda.Runtime.PYTHON_3_9,
-            timeout=cdk.Duration.seconds(amount=30),
+            # timeout=cdk.Duration.seconds(amount=30),
             handler="index.lambda_handler",
             code=_lambda.Code.from_inline(open("microbit/lambda_functions/functions/lambda_handler.py").read()),
             role=LambdaRole(self, self.data_lake_raw, self.data_lake_processed),
