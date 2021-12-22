@@ -1,6 +1,6 @@
 import boto3, gzip
 from io import BytesIO
-import json
+import json, ast
 
 client = boto3.client('s3')
 
@@ -21,8 +21,9 @@ def lambda_handler(event, context):
             with gzip.GzipFile(fileobj=BytesIO(gzip_content), mode='rb') as gzipfile:
                 content = gzipfile.read()
                 # for line in content.decode("utf-8").split("\n"):
-                dic = json.loads(content.decode("utf-8"))
-                print(dic)
+                # dic = json.loads(content.decode("utf-8"))
+                print(ast.literal_eval(content.decode("utf-8")))
+                # print(dic)
         # return response["ContentType"]
     except Exception as e:
         print(e)
