@@ -1,4 +1,4 @@
-from aws_cdk import core as cdk, aws_lambda as _lambda, aws_s3_notifications
+from aws_cdk import core as cdk, aws_lambda as _lambda, aws_s3 as s3,aws_s3_notifications
 from microbit.data_lake.base import BaseDataLakeBucket
 from microbit import active_environment
 from microbit.common_stack import CommonStack
@@ -38,6 +38,4 @@ class LambdaFunctionsStack(cdk.Stack):
         notification = aws_s3_notifications.LambdaDestination(fn)
 
         # assign notification for the s3 event type (ex: OBJECT_CREATED)
-        self.data_lake_raw.add_event_notification(
-            self.data_lake_raw.EventType.OBJECT_CREATED, notification
-        )
+        self.data_lake_raw.add_event_notification(s3.EventType.OBJECT_CREATED, notification)
