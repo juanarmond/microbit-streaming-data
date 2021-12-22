@@ -30,7 +30,7 @@ def lambda_handler(event, context):
                             print(dic["k"])
                         # for string in list:
                         #     elif string.startswith(dic["k"]):
-                        print("dic", dic["k"])
+                        # print("dic", dic["k"])
             print("-" * 100)
         # return response["ContentType"]
     except Exception as e:
