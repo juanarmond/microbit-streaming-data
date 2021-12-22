@@ -6,13 +6,12 @@ client = boto3.client('s3')
 
 
 def lambda_handler(event, context):
-    # print("Received event: " + json.dumps(event, indent=2))
-
     # Get the object from the event and show its content type
-    # s3: // s3 - microbit - data - develop - data - lake - raw / atomic_events / date = 2021 - 11 - 26 /
+    list = []
     bucket = "s3-microbit-data-develop-data-lake-raw"
     try:
         response = client.list_objects(Bucket=bucket, Prefix="atomic_events")
+        print('Total Responses: ', len(response.get("Contents", [])))
         for content in response.get("Contents", []):
             # print(content.get("Key"))
             key = content.get("Key")
@@ -25,7 +24,7 @@ def lambda_handler(event, context):
                     line = line.rstrip()
                     if line:
                         dic = json.loads(line)
-                        print('dic',dic)
+                        print('dic',dic['key'])
             print('-'*100)
         # return response["ContentType"]
     except Exception as e:
