@@ -34,8 +34,8 @@ class LambdaFunctionsStack(cdk.Stack):
             role=LambdaRole(self, self.data_lake_raw, self.data_lake_processed),
         )
 
-        # create s3 notification for lambda function
-        notification = aws_s3_notifications.LambdaDestination(fn)
-
-        # assign notification for the s3 event type (ex: OBJECT_CREATED)
-        self.data_lake_raw.add_event_notification(s3.EventType.OBJECT_CREATED, notification)
+        # # create s3 notification for lambda function
+        # notification = aws_s3_notifications.LambdaDestination(fn)
+        #
+        # # assign notification for the s3 event type (ex: OBJECT_CREATED)
+        # self.data_lake_raw.add_event_notification(s3.EventType.OBJECT_CREATED, notification)
