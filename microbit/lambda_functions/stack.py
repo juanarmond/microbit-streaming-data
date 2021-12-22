@@ -7,12 +7,12 @@ from microbit.lambda_functions.base import LambdaRole
 
 class LambdaFunctionsStack(cdk.Stack):
     def __init__(
-            self,
-            scope: cdk.Construct,
-            data_lake_raw: BaseDataLakeBucket,
-            data_lake_processed: BaseDataLakeBucket,
-            common_stack: CommonStack,
-            **kwargs,
+        self,
+        scope: cdk.Construct,
+        data_lake_raw: BaseDataLakeBucket,
+        data_lake_processed: BaseDataLakeBucket,
+        common_stack: CommonStack,
+        **kwargs,
     ) -> None:
         self.common_stack = common_stack
         self.deploy_env = active_environment
@@ -22,8 +22,7 @@ class LambdaFunctionsStack(cdk.Stack):
             scope, id=f"{self.deploy_env.value}-lambda-functions-stack", **kwargs
         )
 
-    def fn(self):
-        _lambda.Function(
+        self.fn = _lambda.Function(
             scope=self,
             id=f"{self.deploy_env.value}-lambda-functions",
             runtime=_lambda.Runtime.PYTHON_3_9,
