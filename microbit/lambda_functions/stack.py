@@ -22,6 +22,7 @@ class LambdaFunctionsStack(cdk.Stack):
             scope, id=f"{self.deploy_env.value}-lambda-functions-stack", **kwargs
         )
 
+
         fn = _lambda.Function(
             scope=self,
             id=f"{self.deploy_env.value}-lambda-functions",
