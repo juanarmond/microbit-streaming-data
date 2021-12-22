@@ -16,6 +16,7 @@ def lambda_handler(event, context):
         for content in response.get("Contents", []):
             # print(content.get("Key"))
             key = content.get("Key")
+            print(key)
             obj = client.get_object(Bucket=bucket, Key=key)
             gzip_content = obj['Body'].read()
             with gzip.GzipFile(fileobj=BytesIO(gzip_content), mode='rb') as gzipfile:
@@ -23,17 +24,15 @@ def lambda_handler(event, context):
                 for line in content.decode().split("\n"):
                     line = line.rstrip()
                     if line:
-                        # print('l1: ',line)
                         dic = json.loads(line)
                         print('dic',dic)
+            print('-'*100)
         # return response["ContentType"]
     except Exception as e:
         print(e)
-        print(content.decode())
-
-        # print(
-        #     "Error getting objects from bucket {}. Make sure they exist and your bucket is in the same region as this function.".format(
-        #         client
-        #     )
-        # )
+        print(
+            "Error getting objects from bucket {}. Make sure they exist and your bucket is in the same region as this function.".format(
+                client
+            )
+        )
         raise e
