@@ -5,11 +5,11 @@ from microbit import active_environment
 
 class LambdaRole(iam.Role):
     def __init__(
-            self,
-            scope: core.Construct,
-            data_lake_raw: BaseDataLakeBucket,
-            data_lake_processed: BaseDataLakeBucket,
-            **kwargs,
+        self,
+        scope: core.Construct,
+        data_lake_raw: BaseDataLakeBucket,
+        data_lake_processed: BaseDataLakeBucket,
+        **kwargs,
     ) -> None:
         self.deploy_env = active_environment
         self.data_lake_raw = data_lake_raw
