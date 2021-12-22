@@ -22,6 +22,8 @@ def lambda_handler(event, context):
                 content = gzipfile.read()
                 for line in content.decode().split("\n"):
                     line = line.rstrip()
+                    if "k" not in line:
+                        line = line.replace('""', '"k"')
                     if line:
                         dic = json.loads(line)
                         if dic["k"] in list:
