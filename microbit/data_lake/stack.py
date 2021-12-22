@@ -1,12 +1,7 @@
 from microbit.data_lake.base import BaseDataLakeBucket, DataLakeLayer
 from aws_cdk import core
-from aws_cdk import (
-    aws_s3 as s3,
-    aws_s3_notifications as s3n
-)
-
+from aws_cdk import aws_s3 as s3
 from microbit import active_environment
-from microbit.lambda_functions.stack import LambdaFunctionsStack
 
 
 class DataLakeStack(core.Stack):
@@ -37,9 +32,3 @@ class DataLakeStack(core.Stack):
         self.data_lake_processed_bucket = BaseDataLakeBucket(
             self, deploy_env=self.deploy_env, layer=DataLakeLayer.PROCESSED
         )
-
-        # create s3 notification for lambda function
-        notification = s3n.LambdaDestination(LambdaFunctionsStack.fn)
-
-        # assign notification for the s3 event type (ex: OBJECT_CREATED)
-        self.data_lake_raw.add_event_notification(s3.EventType.OBJECT_CREATED, notification)
