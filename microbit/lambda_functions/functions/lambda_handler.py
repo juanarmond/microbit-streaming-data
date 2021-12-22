@@ -27,8 +27,8 @@ def lambda_handler(event, context):
         # return response["ContentType"]
     except Exception as e:
         print(e)
-        print('line', type(line))
-        print(content.decode())
+        print('line', line)
+        # print(content.decode())
 
         # print(
         #     "Error getting objects from bucket {}. Make sure they exist and your bucket is in the same region as this function.".format(
