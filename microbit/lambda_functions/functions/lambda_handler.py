@@ -21,9 +21,11 @@ def lambda_handler(event, context):
             with gzip.GzipFile(fileobj=BytesIO(gzip_content), mode='rb') as gzipfile:
                 content = gzipfile.read()
                 for line in content.decode().split("\n"):
-                    # print('l1: ',line)
-                    dic = json.loads(line)
-                    print('dic',dic)
+                    line = line.rstrip()
+                    if line:
+                        # print('l1: ',line)
+                        dic = json.loads(line)
+                        print('dic',dic)
         # return response["ContentType"]
     except Exception as e:
         print(e)
