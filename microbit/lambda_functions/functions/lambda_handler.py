@@ -20,9 +20,8 @@ def lambda_handler(event, context):
             gzip_content = obj['Body'].read()
             with gzip.GzipFile(fileobj=BytesIO(gzip_content), mode='rb') as gzipfile:
                 content = gzipfile.read()
-                # dic = json.loads(gzipfile)
-                print(gzipfile)
-                print(content)
+                dic = json.loads(content)
+                print(dic)
         # return response["ContentType"]
     except Exception as e:
         print(e)
