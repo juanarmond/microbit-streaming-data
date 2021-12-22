@@ -20,7 +20,7 @@ def lambda_handler(event, context):
             gzip_content = obj['Body'].read()
             with gzip.GzipFile(fileobj=BytesIO(gzip_content), mode='rb') as gzipfile:
                 content = gzipfile.read()
-                dic = json.loads(content.decode())
+                dic = json.loads(content.decode().replace('"',"'"))
                 print(dic)
                 # for line in content.decode().split("\n"):
                 #     print(type(line))
