@@ -12,7 +12,7 @@ from microbit.redshift.stack import RedshiftStack
 app = core.App()
 data_lake = DataLakeStack(app)
 common_stack = CommonStack(app)
-kinesis = KinesisStack(app, data_lake_raw=data_lake.data_lake_raw_bucket)
+kinesis = KinesisStack(app, data_lake_raw_bucket=data_lake.data_lake_raw_bucket)
 lambda_functions = LambdaFunctionsStack(
     app,
     data_lake_raw=data_lake.data_lake_raw_bucket,
