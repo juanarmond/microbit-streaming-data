@@ -59,7 +59,6 @@ def guess_port():
 
 def main():
     event = {}
-    # event = {"time":"","serial":"","signal":"","x":"","y":"","z":"","distance":"","speed":"","sensor":"","light":"","compass":"","sound":"","temperature":"","tembo":"","magnetic":""}
     try:
         port = guess_port()
         if port == None:
