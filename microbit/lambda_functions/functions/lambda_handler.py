@@ -7,7 +7,8 @@ client = boto3.client("s3")
 
 def lambda_handler(event, context):
     # Get the object from the event and show its content type
-    list = ["carSN", "a.x", "a.y", "a.z", "tembo", "temp", "dist", "light", "sound", "compass", "mag.x", "mag.y", "mag.z", "mag.str", "left", "right", "mv", "seconds"]
+    list = ["carSN", "a.x", "a.y", "a.z", "tembo", "temp", "dist", "light", "sound", "compass", "mag.x", "mag.y",
+            "mag.z", "mag.str", "left", "right", "mv", "seconds"]
     bucket = "s3-microbit-data-develop-data-lake-raw"
     data = ""
     try:
@@ -28,10 +29,14 @@ def lambda_handler(event, context):
                             line = line.replace('""', '"k"')
                         dic = json.loads(line)
                         if dic["k"] in list:
-                            data = f"{data}+{json.dumps(dic)} + \n"
+                            data = f"{data}{json.dumps(dic)}\n"
                         else:
                             print("NOT IN THE LIST", dic["k"])
-                print(data)
+                if data:
+                    # with gzip.GzipFile(fileobj=data, mode="w") as new_gzipfile:
+                    print(data)
+                else:
+                    print('NO DATA')
             print("-" * 100)
         # return response["ContentType"]
     except Exception as e:
