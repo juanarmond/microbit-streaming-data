@@ -7,8 +7,9 @@ client = boto3.client("s3")
 
 def lambda_handler(event, context):
     # Get the object from the event and show its content type
-    list = ["carSN", "a.x", "a.y", "a.z", "tembo", "temp", "dist", "light", "sound", "compass", "mag.x", "mag.y", "mag.z", "mag.str", "left", "right", "mv"]
+    list = ["carSN", "a.x", "a.y", "a.z", "tembo", "temp", "dist", "light", "sound", "compass", "mag.x", "mag.y", "mag.z", "mag.str", "left", "right", "mv", "seconds"]
     bucket = "s3-microbit-data-develop-data-lake-raw"
+    data = ""
     try:
         response = client.list_objects(Bucket=bucket, Prefix="atomic_events")
         print("Total Responses: ", len(response.get("Contents", [])))
@@ -22,17 +23,15 @@ def lambda_handler(event, context):
                 content = gzipfile.read()
                 for line in content.decode().split("\n"):
                     line = line.rstrip()
-                    if "k" not in line:
-                        line = line.replace('""', '"k"')
                     if line:
+                        if "k" not in line:
+                            line = line.replace('""', '"k"')
                         dic = json.loads(line)
                         if dic["k"] in list:
-                            data = json.dumps(dic) + "\n"
+                            data = f"{data}+{json.dumps(dic)} + \n"
                         else:
-                            print(dic["k"])
-                        # for string in list:
-                        #     elif string.startswith(dic["k"]):
-                        # print("dic", dic["k"])
+                            print("NOT IN THE LIST", dic["k"])
+                print(data)
             print("-" * 100)
         # return response["ContentType"]
     except Exception as e:
