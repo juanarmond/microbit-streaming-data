@@ -4,7 +4,6 @@ from datetime import datetime
 import json
 
 client = boto3.client("s3")
-client_firehose = boto3.client("firehose")
 
 
 def lambda_handler(event, context):
