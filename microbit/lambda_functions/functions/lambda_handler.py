@@ -35,7 +35,7 @@ def lambda_handler(event, context):
                             print("NOT IN THE LIST", dic["k"])
                 if data:
                     print(data)
-                    with gzip.GzipFile(fileobj=f"{key.split('/')[2]}", mode="wb") as new_gzipfile:
+                    with gzip.open(filename=f"{key.split('/')[2].split('-')[-5]}", mode="wb") as new_gzipfile:
                         with TextIOWrapper(new_gzipfile, encoding='utf-8') as encode:
                             encode.write(data)
                         client.Bucket(data_lake_processed).put_object(
