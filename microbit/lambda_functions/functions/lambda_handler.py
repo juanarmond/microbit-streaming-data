@@ -36,18 +36,16 @@ def lambda_handler(event, context):
                         else:
                             print("NOT IN THE LIST", dic["k"])
                 if data:
-                    print(data)
+                    # print(data)
                     now = datetime.now()
-                    with gzip.open(
-                            filename=f"/tmp/develop-processed-delivery-stream-{now.strftime('%Y-%m-%d-%H-%M-%S')}-{'-'.join(key.split('-')[-5:])}.gz",
-                            mode="wb") as new_gzipfile:
+                    filename = f"/tmp/develop-processed-delivery-stream-{now.strftime('%Y-%m-%d-%H-%M-%S')}-{'-'.join(key.split('-')[-5:])}.gz"
+                    with gzip.open(filename=filename, mode="wb") as new_gzipfile:
                         with TextIOWrapper(new_gzipfile, encoding='utf-8') as encode:
                             encode.write(data)
-                    print(type(new_gzipfile))
-                    print(new_gzipfile)
-                    # client.Bucket(data_lake_processed).put_object(
-                    #     Key="atomic_events/date=!{timestamp:yyyy}-!{timestamp:MM}-!{timestamp:dd}/",
-                    #     Body=new_gzipfile)
+                    print(filename)
+                    client.Bucket(data_lake_processed).put_object(
+                        Key="atomic_events/date=!{timestamp:yyyy}-!{timestamp:MM}-!{timestamp:dd}/",
+                        Body=new_gzipfile)
 
                 else:
                     print('NO DATA')
