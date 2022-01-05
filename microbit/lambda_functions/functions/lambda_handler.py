@@ -38,16 +38,16 @@ def lambda_handler(event, context):
                 if data:
                     # print(data)
                     now = datetime.now()
-                    filename = f"/tmp/develop-processed-delivery-stream-{now.strftime('%Y-%m-%d-%H-%M-%S')}-{'-'.join(key.split('-')[-5:])}"
-                    with gzip.open(filename=filename, mode="wb") as new_gzipfile:
+                    path = "/tmp/"
+                    filename = f"develop-processed-delivery-stream-{now.strftime('%Y-%m-%d-%H-%M-%S')}-{'-'.join(key.split('-')[-5:])}"
+                    with gzip.open(filename=f"{path}{filename}", mode="wb") as new_gzipfile:
                         with TextIOWrapper(new_gzipfile, encoding='utf-8') as encode:
                             encode.write(data)
-                    new_gzipfile.close()
-                    print(new_gzipfile.name)
-                    client.put_object(
-                        Bucket=data_lake_processed,
-                        Key="atomic_events/date=!{timestamp:yyyy}-!{timestamp:MM}-!{timestamp:dd}/",
-                        Body=new_gzipfile)
+                        print(new_gzipfile.name)
+                        client.upload_file(
+                            Filename=f"{path}{filename}",
+                            Bucket=data_lake_processed,
+                            Key=f"atomic_events/date={now.strftime('%Y-%m-%d')}/{filename}")
 
                 else:
                     print('NO DATA')
