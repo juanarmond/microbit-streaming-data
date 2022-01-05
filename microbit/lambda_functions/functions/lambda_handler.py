@@ -1,7 +1,8 @@
-import boto3, gzip
-from io import BytesIO, TextIOWrapper
-from datetime import datetime
 import json
+from datetime import datetime
+from io import BytesIO, TextIOWrapper
+import boto3
+import gzip
 
 client = boto3.client("s3")
 
@@ -37,15 +38,16 @@ def lambda_handler(event, context):
                 if data:
                     # print(data)
                     now = datetime.now()
-                    filename = f"/tmp/develop-processed-delivery-stream-{now.strftime('%Y-%m-%d-%H-%M-%S')}-{'-'.join(key.split('-')[-5:])}.gz"
+                    filename = f"/tmp/develop-processed-delivery-stream-{now.strftime('%Y-%m-%d-%H-%M-%S')}-{'-'.join(key.split('-')[-5:])}"
                     with gzip.open(filename=filename, mode="wb") as new_gzipfile:
                         with TextIOWrapper(new_gzipfile, encoding='utf-8') as encode:
                             encode.write(data)
-                        print(filename)
-                        client.put_object(
-                            Bucket=data_lake_processed,
-                            Key="atomic_events/date=!{timestamp:yyyy}-!{timestamp:MM}-!{timestamp:dd}/",
-                            Body=new_gzipfile)
+                    new_gzipfile.close()
+                    print(new_gzipfile.name)
+                    client.put_object(
+                        Bucket=data_lake_processed,
+                        Key="atomic_events/date=!{timestamp:yyyy}-!{timestamp:MM}-!{timestamp:dd}/",
+                        Body=new_gzipfile)
 
                 else:
                     print('NO DATA')
