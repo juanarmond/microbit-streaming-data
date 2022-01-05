@@ -39,7 +39,7 @@ def lambda_handler(event, context):
                     print(data)
                     now = datetime.now()
                     with gzip.open(
-                            filename=f"develop-processed-delivery-stream-{now.strftime('%Y-%m-%d-%H-%M-%S')}-{key.split('-')[-5:]}.gz",
+                            filename=f"/tmp/develop-processed-delivery-stream-{now.strftime('%Y-%m-%d-%H-%M-%S')}-{'-'.join(key.split('-')[-5:])}.gz",
                             mode="wb") as new_gzipfile:
                         with TextIOWrapper(new_gzipfile, encoding='utf-8') as encode:
                             encode.write(data)
