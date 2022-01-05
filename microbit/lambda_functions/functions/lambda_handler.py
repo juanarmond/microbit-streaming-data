@@ -6,6 +6,7 @@ import json
 client = boto3.client("s3")
 client_firehose = boto3.client("firehose")
 
+
 def lambda_handler(event, context):
     # Get the object from the event and show its content type
     data_list = ["carSN", "a.x", "a.y", "a.z", "tembo", "temp", "dist", "light", "sound", "compass", "mag.x", "mag.y",
@@ -37,7 +38,8 @@ def lambda_handler(event, context):
                 if data:
                     print(data)
                     now = datetime.now()
-                    with gzip.open(filename=f"date={now.strftime('%Y-%m-%d-%H-%M-%S')}.gz", mode="wb") as new_gzipfile:
+                    with gzip.open(filename=f"develop-processed-delivery-stream-{now.strftime('%Y-%m-%d-%H-%M-%S')}.gz",
+                                   mode="wb") as new_gzipfile:
                         with TextIOWrapper(new_gzipfile, encoding='utf-8') as encode:
                             encode.write(data)
                         client.Bucket(data_lake_processed).put_object(
