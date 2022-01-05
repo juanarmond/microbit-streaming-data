@@ -3,7 +3,7 @@ from io import BytesIO
 import json
 
 client = boto3.client("s3")
-
+client_firehose = boto3.client("firehose")
 
 def lambda_handler(event, context):
     # Get the object from the event and show its content type
@@ -35,7 +35,7 @@ def lambda_handler(event, context):
                             print("NOT IN THE LIST", dic["k"])
                 if data:
                     print(data)
-                    with gzip.GzipFile(fileobj=data, mode="w") as new_gzipfile:
+                    with gzip.GzipFile(fileobj=data, mode="wb") as new_gzipfile:
                         client.Bucket(data_lake_processed).put_object(
                             Key="atomic_events/date=!{timestamp:yyyy}-!{timestamp:MM}-!{timestamp:dd}/",
                             Body=new_gzipfile)
