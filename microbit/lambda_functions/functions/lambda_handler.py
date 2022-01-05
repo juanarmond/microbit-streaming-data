@@ -42,7 +42,8 @@ def lambda_handler(event, context):
                         with TextIOWrapper(new_gzipfile, encoding='utf-8') as encode:
                             encode.write(data)
                     print(filename)
-                    client.Bucket(data_lake_processed).put_object(
+                    client.put_object(
+                        Bucket=data_lake_processed,
                         Key="atomic_events/date=!{timestamp:yyyy}-!{timestamp:MM}-!{timestamp:dd}/",
                         Body=new_gzipfile)
 
