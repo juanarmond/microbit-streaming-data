@@ -3,31 +3,35 @@
 ![](images/result.png)
 
 ## Objective
-I will learn how to assemble and how to capture and stream all real-time data into AWS. 
-Also, I want to use this data to create a visual data exploration.
+
+I will learn how to assemble and how to capture and stream all real-time data into AWS. Also, I want to use this data to
+create a visual data exploration.
 
 ## Description
-Using the BBC micro:bit too built an autonomous car and another micro:bit to be a receiver to capture all raw data 
-generated from the gyroscope, proximity sensor, line follow sensor, power consumption, velocity and more. 
-These raw data will be streamed into AWS to explore and visualize. The result screenshots will be at the end.
+
+Using the BBC micro:bit too built an autonomous car and another micro:bit to be a receiver to capture all raw data
+generated from the gyroscope, proximity sensor, line follow sensor, power consumption, velocity and more. These raw data
+will be streamed into AWS to explore and visualize. The result screenshots will be at the end.
 
 ## Microbit
-The BBC micro:bit is a pocket-sized computer that introduces you to how software and hardware work together. 
-It has an LED light display, buttons, sensors and many input/output features that you can program and physically interact with.
+
+The BBC micro:bit is a pocket-sized computer that introduces you to how software and hardware work together. It has an
+LED light display, buttons, sensors and many input/output features that you can program and physically interact with.
 
 ![](images/microbit.png)
 
 ## Car
+
 The car is equipped with two bi-directional DC motors with variable speed control, light, buzzer, obstacle detection and
-avoidance, line follow sensor, pen hole to draw, battery holders for 4x AA batteries and an onboard edge connector for 
+avoidance, line follow sensor, pen hole to draw, battery holders for 4x AA batteries and an onboard edge connector for
 the micro:bit.
 
 ![](images/car.jpg)
 
 ## Data
 
-These are all the data collected and transmitted to be ingested into AWS S3 a in a 
-JSON format.
+These are all the data collected and transmitted to be ingested into AWS S3 a in a JSON format.
+
 * Device Serial Number
 * Time
 * Acceleration (mg) X
@@ -47,7 +51,6 @@ JSON format.
 * Line Sensor (Right)
 * Millivolts
 * Total time in seconds
-
 
 ### JSON Example
 
@@ -72,68 +75,82 @@ JSON format.
 {'event_timestamp': 1637930417.524824, 'time': 81537, 'signal': -51, 'key': 'seconds', 'value': 21.537}
 ```
 
-## AWS Cloud Services 
+## AWS Cloud Services
 
 These are the AWS services used and a why I am using it.
 
 * Kinesis Data Firehose - stream the real-time data into Amazon S3.
 * S3 - it stores the real-time data to be used.
+* Lambda Function - every time a new data arrives in the raw data lake, it triggers the lambda function to check and
+  clean the data if necessary and move it to the processed data lake.
 * Glue
-  * Crawler - it is a cron schedule that is set to every 5 minutes populate the Glue Data Catalog with tables
-  * Glue Data Catalog - it indexes and creates the database schema.
-* Athena - is an interactive query service that analyze data by connecting to Glue Data Catalog to store and retrieve 
-table metadata from the Amazon S3 data.
-* 
+    * Crawler - it is a cron schedule that is set to every 5 minutes populate the Glue Data Catalog with tables
+    * Glue Data Catalog - it indexes and creates the database schema.
+* Athena - is an interactive query service that analyze data by connecting to Glue Data Catalog to store and retrieve
+  table metadata from the Amazon S3 data.
+* Amazon Aurora - it stores the processed data as a relational database.
+* Redshit - 
 
 ## Installation
 
 ### Requirements:
 
 1) Setup your IAM User credentials
+
 - ```~/.aws/config```
+
 ```
    [profile my_aws_profile]
    region = us-east-1
    output = yaml
 ```
-  - ```~/.aws/credentials```
+
+- ```~/.aws/credentials```
+
 ```
    [profile my_aws_profile]
    aws_access_key_id = <my_access_key_id> 
    aws_secret_access_key = <my_secret_access_key>
  ```
+
 2) Manually create a virtualenv on MacOS and Linux
+
 ```shell script
 $ python3 -m venv .venv
 ```
-3) After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+
+3) After the init process completes and the virtualenv is created, you can use the following step to activate your
+   virtualenv.
+
 ```shell script
 $ source .venv/bin/activate
 ```
+
 4) Once the virtualenv is activated, you can install the required dependencies.
+
 ```shell script
 $ pip install -r requirements.txt
 ```
-5) Microbit Files
-Inside the folder microbit_files contains the code for the autonomous car and the receiver.
-Please go to the https://makecode.microbit.org/ follow the instruction to connect the microbit.
-Then copy and past the code to download to each microbit.
+
+5) Microbit Files Inside the folder microbit_files contains the code for the autonomous car and the receiver. Please go
+   to the https://makecode.microbit.org/ follow the instruction to connect the microbit. Then copy and past the code to
+   download to each microbit.
 
 ![](images/makecode.png)
 
-
 ### Environment Secrets:
+
 1) Make sure the env vars are present in GitHub settings look at deploy.yaml where they are used:
- - **AWS_ACCESS_KEY_ID**
- - **AWS_SECRET_ACCESS_KEY**
- - **AWS_DEFAULT_REGION**
+
+- **AWS_ACCESS_KEY_ID**
+- **AWS_SECRET_ACCESS_KEY**
+- **AWS_DEFAULT_REGION**
+
 2) Make deploy
 
-
 ## CI/CD
-This repo uses GitHub Actions for CI/CD. 
 
+This repo uses GitHub Actions for CI/CD.
 
 ## Results
 
