@@ -52,11 +52,11 @@ class GlueCatalogStack(core.Stack):
 
         self.atomic_events_crawler_processed = BaseGlueCrawler(
             self,
-            glue_database=self.data_lake_processed,
+            glue_database=self.processed_database,
             glue_role=self.role_processed,
             table_name="atomic_events",
             schedule_expression="cron(0/5 * * * ? *)",
         )
 
-        self.atomic_events_crawler_processed.node.add_dependency(self.data_lake_processed)
+        self.atomic_events_crawler_processed.node.add_dependency(self.processed_database)
         self.atomic_events_crawler_processed.node.add_dependency(self.role_processed)
