@@ -42,7 +42,7 @@ class GlueCatalogStack(core.Stack):
         self.atomic_events_crawler_raw = BaseGlueCrawler(
             self,
             glue_database=self.raw_database,
-            glue_role=self.role,
+            glue_role=self.role_raw,
             table_name="atomic_events",
             schedule_expression="cron(0/5 * * * ? *)",
         )
@@ -53,7 +53,7 @@ class GlueCatalogStack(core.Stack):
         self.atomic_events_crawler_processed = BaseGlueCrawler(
             self,
             glue_database=self.data_lake_processed,
-            glue_role=self.role,
+            glue_role=self.role_processed,
             table_name="atomic_events",
             schedule_expression="cron(0/5 * * * ? *)",
         )
