@@ -89,7 +89,21 @@ These are the AWS services used and a why I am using it.
 * Athena - is an interactive query service that analyze data by connecting to Glue Data Catalog to store and retrieve
   table metadata from the Amazon S3 data.
 * Amazon Aurora - it stores the processed data as a relational database.
-* Redshit - 
+* Redshit - gets the schema and catalog from Glue and uses Athena to read the data from S3.
+  * To create the scheme for Redshift
+      ```
+      CREATE EXTERNAL SCHEMA data_lake_processed
+      FROM DATA CATALOG
+      DATABASE 'glue_microbit_develop_data_lake_processed'
+      REGION 'eu-west-2'
+      IAM_ROLE 'arn:aws:iam::********:role/develop-redshift-stack-iamdevelopredshiftspectrumr-*****'
+    
+      CREATE EXTERNAL SCHEMA data_lake_raw
+      FROM DATA CATALOG
+      DATABASE 'glue_microbit_develop_data_lake_raw'
+      REGION 'eu-west-2'
+      IAM_ROLE 'arn:aws:iam::********:role/develop-redshift-stack-iamdevelopredshiftspectrumr-*****
+      ```
 
 ## Installation
 
