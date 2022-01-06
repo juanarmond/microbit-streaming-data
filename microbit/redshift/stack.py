@@ -84,7 +84,7 @@ class RedshiftStack(core.Stack):
             vpc=self.common_stack.custom_vpc,
             cluster_type=redshift.ClusterType.MULTI_NODE,
             node_type=redshift.NodeType.DC2_LARGE,
-            default_database_name="microbit",
+            default_database_name="microbit_data",
             number_of_nodes=2,
             removal_policy=core.RemovalPolicy.DESTROY,
             master_user=redshift.Login(master_username="admin"),

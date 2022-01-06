@@ -31,11 +31,15 @@ class GlueCatalogStack(core.Stack):
             self, data_lake_bucket=self.data_lake_processed
         )
 
-        self.role = BaseDataLakeGlueRole(
+        self.role_raw = BaseDataLakeGlueRole(
             self, data_lake_bucket=self.data_lake_raw
         )
 
-        self.atomic_events_crawler = BaseGlueCrawler(
+        self.role_processed = BaseDataLakeGlueRole(
+            self, data_lake_bucket=self.data_lake_processed
+        )
+
+        self.atomic_events_crawler_raw = BaseGlueCrawler(
             self,
             glue_database=self.raw_database,
             glue_role=self.role,
@@ -43,5 +47,16 @@ class GlueCatalogStack(core.Stack):
             schedule_expression="cron(0/5 * * * ? *)",
         )
 
-        self.atomic_events_crawler.node.add_dependency(self.raw_database)
-        self.atomic_events_crawler.node.add_dependency(self.role)
+        self.atomic_events_crawler_raw.node.add_dependency(self.raw_database)
+        self.atomic_events_crawler_raw.node.add_dependency(self.role_raw)
+
+        self.atomic_events_crawler_processed = BaseGlueCrawler(
+            self,
+            glue_database=self.data_lake_processed,
+            glue_role=self.role,
+            table_name="atomic_events",
+            schedule_expression="cron(0/5 * * * ? *)",
+        )
+
+        self.atomic_events_crawler_processed.node.add_dependency(self.data_lake_processed)
+        self.atomic_events_crawler_processed.node.add_dependency(self.role_processed)
