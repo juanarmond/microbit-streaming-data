@@ -24,10 +24,10 @@ glue_catalog = GlueCatalogStack(
     data_lake_processed=data_lake.data_lake_processed_bucket,
 )
 # athena_stack = AthenaStack(app)
-# redshift = RedshiftStack(
-#     app,
-#     data_lake_raw=data_lake.data_lake_raw_bucket,
-#     data_lake_processed=data_lake.data_lake_processed_bucket,
-#     common_stack=common_stack,
-# )
+redshift = RedshiftStack(
+    app,
+    data_lake_raw=data_lake.data_lake_raw_bucket,
+    data_lake_processed=data_lake.data_lake_processed_bucket,
+    common_stack=common_stack,
+)
 app.synth()
