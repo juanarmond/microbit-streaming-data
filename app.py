@@ -7,6 +7,7 @@ from microbit.kinesis.stack import KinesisStack
 from microbit.lambda_functions.stack import LambdaFunctionsStack
 from microbit.glue_catalog.stack import GlueCatalogStack
 from microbit.athena.stack import AthenaStack
+from microbit.aurora.stack import RdsStack
 from microbit.redshift.stack import RedshiftStack
 
 app = core.App()
@@ -24,6 +25,11 @@ glue_catalog = GlueCatalogStack(
     data_lake_processed=data_lake.data_lake_processed_bucket,
 )
 # athena_stack = AthenaStack(app)
+rds_aurora = RdsStack(
+    app,
+    data_lake_raw=data_lake.data_lake_raw_bucket,
+    data_lake_processed=data_lake.data_lake_processed_bucket,
+)
 redshift = RedshiftStack(
     app,
     data_lake_raw=data_lake.data_lake_raw_bucket,
