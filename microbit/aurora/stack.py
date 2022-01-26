@@ -72,7 +72,7 @@ class RdsStack(core.Stack):
         self.data_lake_processed = data_lake_processed
         super().__init__(scope, id=f"{self.deploy_env.value}-rds-aurora-stack", **kwargs)
 
-        import_bucket = self.data_lake_processed
+        # import_bucket = self.data_lake_processed
         # export_bucket = s3.Bucket(self, "exportbucket")
 
         cluster = rds.DatabaseCluster(self, "Database",
@@ -86,7 +86,7 @@ class RdsStack(core.Stack):
                                                                             ec2.InstanceSize.SMALL),
                                           vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE),
                                           vpc=self.common_stack.custom_vpc, ),
-                                      s3_import_buckets=[import_bucket],
+                                      # s3_import_buckets=[import_bucket],
                                       s3_import_role=RDSRole(self, self.data_lake_raw, self.data_lake_processed)
                                       # s3_export_buckets = [export_bucket]
                                       )
