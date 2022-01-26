@@ -77,7 +77,7 @@ class RdsStack(core.Stack):
 
         cluster = rds.DatabaseCluster(self, "microbit_aurora",
                                       engine=rds.DatabaseInstanceEngine.postgres(
-                                          version=rds.PostgresEngineVersion.VER_12_3),
+                                          version=rds.PostgresEngineVersion.VER_13_4),
                                       # credentials=rds.Credentials.from_generated_secret("clusteradmin"),
                                       # Optional - will default to 'admin' username and generated password
                                       instance_props=rds.InstanceProps(
