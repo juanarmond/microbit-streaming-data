@@ -104,5 +104,5 @@ class RdsStack(core.Stack):
                                         )
                                         )
 
-        roles = RDSRole(self, self.data_lake_raw, self.data_lake_processed),
+        roles = RDSRole(self, self.data_lake_raw, self.data_lake_processed)
         instance.grant_connect(roles)
