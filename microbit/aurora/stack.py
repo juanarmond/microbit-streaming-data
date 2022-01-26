@@ -62,7 +62,7 @@ class RdsStack(core.Stack):
             self,
             scope: core.Construct,
             common_stack: CommonStack,
-            data_lake_raw_bucket: BaseDataLakeBucket,
+            data_lake_raw: BaseDataLakeBucket,
             data_lake_processed: BaseDataLakeBucket,
             **kwargs,
     ) -> None:
