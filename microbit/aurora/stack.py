@@ -26,7 +26,7 @@ class RDSRole(iam.Role):
             scope,
             id=f"iam-{self.deploy_env}-data-lake-rds-role",
             assumed_by=iam.ServicePrincipal("rds.amazonaws.com"),
-            description="Role to allow RDS to save data to data lake",
+            description="Role to allow RDS to access data from data lake",
         )
         self.add_policy()
 
@@ -67,17 +67,16 @@ class RdsStack(core.Stack):
             **kwargs,
     ) -> None:
         self.common_stack = common_stack
-        self.deploy_env = os.environ["ENVIRONMENT"]
+        self.deploy_env = active_environment
         self.data_lake_raw = data_lake_raw
         self.data_lake_processed = data_lake_processed
-        super().__init__(scope, id=f"{self.deploy_env}-rds-aurora-stack", **kwargs)
+        super().__init__(scope, id=f"{self.deploy_env.value}-rds-aurora-stack", **kwargs)
 
         import_bucket = self.data_lake_processed
         # export_bucket = s3.Bucket(self, "exportbucket")
 
         cluster = rds.DatabaseCluster(self, "Database",
-                                      engine=rds.DatabaseClusterEngine.aurora_mysql(
-                                          version=rds.AuroraMysqlEngineVersion.VER_2_08_1),
+                                      engine=rds.DatabaseClusterEngine.AURORA_MYSQL,
                                       # credentials=rds.Credentials.from_generated_secret("clusteradmin"),
                                       # Optional - will default to 'admin' username and generated password
                                       instance_props=rds.InstanceProps(
