@@ -29,6 +29,7 @@ rds_aurora = RdsStack(
     app,
     data_lake_raw=data_lake.data_lake_raw_bucket,
     data_lake_processed=data_lake.data_lake_processed_bucket,
+    common_stack=common_stack,
 )
 redshift = RedshiftStack(
     app,

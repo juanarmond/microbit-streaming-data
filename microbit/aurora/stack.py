@@ -68,7 +68,7 @@ class RdsStack(core.Stack):
     ) -> None:
         self.common_stack = common_stack
         self.deploy_env = os.environ["ENVIRONMENT"]
-        self.data_lake_raw_bucket = data_lake_raw_bucket
+        self.data_lake_raw = data_lake_raw_bucket
         self.data_lake_processed = data_lake_processed
         super().__init__(scope, id=f"{self.deploy_env}-rds-aurora-stack", **kwargs)
 
