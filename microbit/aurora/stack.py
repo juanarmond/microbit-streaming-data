@@ -85,7 +85,9 @@ class RdsStack(core.Stack):
                                           instance_type=ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2,
                                                                             ec2.InstanceSize.SMALL),
                                           vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE),
-                                          vpc=self.common_stack.custom_vpc, ), s3_import_buckets=[import_bucket],
+                                          vpc=self.common_stack.custom_vpc, ),
+                                      s3_import_buckets=[import_bucket],
+                                      s3_import_role=RDSRole(self, self.data_lake_raw, self.data_lake_processed)
                                       # s3_export_buckets = [export_bucket]
                                       )
 
@@ -104,5 +106,5 @@ class RdsStack(core.Stack):
         #                                 )
         #                                 )
 
-        roles = RDSRole(self, self.data_lake_raw, self.data_lake_processed)
-        cluster.grant_connect(roles)
+        # roles = RDSRole(self, self.data_lake_raw, self.data_lake_processed)
+        # instance.grant_connect(roles)
