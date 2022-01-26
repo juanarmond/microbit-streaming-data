@@ -76,7 +76,7 @@ class RdsStack(core.Stack):
         # export_bucket = s3.Bucket(self, "exportbucket")
 
         cluster = rds.DatabaseCluster(self, "microbit_aurora",
-                                      engine=rds.DatabaseClusterEngine.aurora_postgres(
+                                      engine=rds.DatabaseInstanceEngine.postgres(
                                           version=rds.PostgresEngineVersion.VER_12_3),
                                       # credentials=rds.Credentials.from_generated_secret("clusteradmin"),
                                       # Optional - will default to 'admin' username and generated password
