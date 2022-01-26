@@ -76,7 +76,8 @@ class RdsStack(core.Stack):
         # export_bucket = s3.Bucket(self, "exportbucket")
 
         cluster = rds.DatabaseCluster(self, "Database",
-                                      engine=rds.DatabaseClusterEngine.AURORA_MYSQL,
+                                      engine=rds.DatabaseClusterEngine.aurora_mysql(
+                                          version=rds.AuroraMysqlEngineVersion.VER_2_08_1),
                                       # credentials=rds.Credentials.from_generated_secret("clusteradmin"),
                                       # Optional - will default to 'admin' username and generated password
                                       instance_props=rds.InstanceProps(
@@ -88,20 +89,20 @@ class RdsStack(core.Stack):
                                       # s3_export_buckets = [export_bucket]
                                       )
 
-        instance = rds.DatabaseInstance(self, "Instance",
-                                        engine=rds.DatabaseInstanceEngine.oracle_se2(
-                                            version=rds.OracleEngineVersion.VER_19_0_0_0_2020_04_R1),
-                                        # optional, defaults to m5.large
-                                        instance_type=ec2.InstanceType.of(
-                                            ec2.InstanceClass.BURSTABLE3,
-                                            ec2.InstanceSize.SMALL),
-                                        # credentials=rds.Credentials.from_generated_secret("syscdk"),
-                                        # Optional - will default to 'admin' username and generated password
-                                        vpc=self.common_stack.custom_vpc,
-                                        vpc_subnets=ec2.SubnetSelection(
-                                            subnet_type=ec2.SubnetType.PRIVATE
-                                        )
-                                        )
+        # instance = rds.DatabaseInstance(self, "Instance",
+        #                                 engine=rds.DatabaseInstanceEngine.oracle_se2(
+        #                                     version=rds.OracleEngineVersion.VER_19_0_0_0_2020_04_R1),
+        #                                 # optional, defaults to m5.large
+        #                                 instance_type=ec2.InstanceType.of(
+        #                                     ec2.InstanceClass.BURSTABLE3,
+        #                                     ec2.InstanceSize.SMALL),
+        #                                 # credentials=rds.Credentials.from_generated_secret("syscdk"),
+        #                                 # Optional - will default to 'admin' username and generated password
+        #                                 vpc=self.common_stack.custom_vpc,
+        #                                 vpc_subnets=ec2.SubnetSelection(
+        #                                     subnet_type=ec2.SubnetType.PRIVATE
+        #                                 )
+        #                                 )
 
         roles = RDSRole(self, self.data_lake_raw, self.data_lake_processed)
-        instance.grant_connect(roles)
+        cluster.grant_connect(roles)
