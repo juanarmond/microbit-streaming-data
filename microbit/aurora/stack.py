@@ -15,12 +15,12 @@ class RDSRole(iam.Role):
     def __init__(
             self,
             scope: core.Construct,
-            data_lake_raw_bucket: BaseDataLakeBucket,
+            data_lake_raw: BaseDataLakeBucket,
             data_lake_processed: BaseDataLakeBucket,
             **kwargs,
     ) -> None:
         self.deploy_env = active_environment
-        self.data_lake_raw_bucket = data_lake_raw_bucket
+        self.data_lake_raw = data_lake_raw
         self.data_lake_processed = data_lake_processed
         super().__init__(
             scope,
