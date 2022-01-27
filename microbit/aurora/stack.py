@@ -84,7 +84,7 @@ class RdsStack(core.Stack):
                                           # optional , defaults to t3.medium
                                           instance_type=ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2,
                                                                             ec2.InstanceSize.SMALL),
-                                          vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE),
+                                          vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
                                           vpc=self.common_stack.custom_vpc, ),
                                       # s3_import_buckets=[import_bucket],
                                       s3_import_role=RDSRole(self, self.data_lake_raw, self.data_lake_processed)
