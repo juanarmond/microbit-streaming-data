@@ -77,7 +77,7 @@ class RdsStack(core.Stack):
 
         cluster = rds.DatabaseCluster(self, "microbit_aurora",
                                       engine=rds.DatabaseClusterEngine.aurora_postgres(
-                                          version=rds.AuroraPostgresEngineVersion.VER_13_4),
+                                          version=rds.AuroraPostgresEngineVersion.VER_10_11),
                                       parameter_group=rds.ParameterGroup.from_parameter_group_name(self,
                                                                                                    "ParameterGroup",
                                                                                                    "default.aurora-postgresql10"),
