@@ -76,11 +76,8 @@ class RdsStack(core.Stack):
         # export_bucket = s3.Bucket(self, "exportbucket")
 
         cluster = rds.DatabaseCluster(self, "microbit_aurora",
-                                      engine=rds.DatabaseClusterEngine.aurora_postgres(
-                                          version=rds.AuroraPostgresEngineVersion.VER_10_11),
-                                      parameter_group=rds.ParameterGroup.from_parameter_group_name(self,
-                                                                                                   "ParameterGroup",
-                                                                                                   "default.aurora-postgresql10"),
+                                      engine=rds.DatabaseClusterEngine.aurora_mysql(
+                                          version=rds.AuroraMysqlEngineVersion.VER_3_01_0),
                                       # credentials=rds.Credentials.from_generated_secret("clusteradmin"),
                                       # Optional - will default to 'admin' username and generated password
                                       instance_props=rds.InstanceProps(
