@@ -74,6 +74,23 @@ class RdsStack(core.Stack):
 
         # import_bucket = self.data_lake_processed
         # export_bucket = s3.Bucket(self, "exportbucket")
+        self.aurora_sg = ec2.SecurityGroup(
+            self,
+            f"redshift-{self.deploy_env.value}-sg",
+            vpc=self.common_stack.custom_vpc,
+            allow_all_outbound=True,
+            security_group_name=f"redshift-{self.deploy_env.value}-sg",
+        )
+
+        self.aurora_sg.add_ingress_rule(
+            peer=ec2.Peer.ipv4("0.0.0.0/0"), connection=ec2.Port.tcp(5439)
+        )
+
+        for subnet in self.common_stack.custom_vpc.private_subnets:
+            self.aurora_sg.add_ingress_rule(
+                peer=ec2.Peer.ipv4(subnet.ipv4_cidr_block),
+                connection=ec2.Port.tcp(5439),
+            )
 
         cluster = rds.DatabaseCluster(self, "microbit_aurora",
                                       engine=rds.DatabaseClusterEngine.aurora_mysql(
@@ -85,7 +102,8 @@ class RdsStack(core.Stack):
                                           instance_type=ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2,
                                                                             ec2.InstanceSize.SMALL),
                                           vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
-                                          vpc=self.common_stack.custom_vpc, ),
+                                          vpc=self.common_stack.custom_vpc,
+                                        security_groups=[self.aurora_sg]),
                                       # s3_import_buckets=[import_bucket],
                                       s3_import_role=RDSRole(self, self.data_lake_raw, self.data_lake_processed)
                                       # s3_export_buckets = [export_bucket]

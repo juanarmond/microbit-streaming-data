@@ -13,17 +13,17 @@ from microbit.redshift.stack import RedshiftStack
 app = core.App()
 data_lake = DataLakeStack(app)
 common_stack = CommonStack(app)
-kinesis = KinesisStack(app, data_lake_raw_bucket=data_lake.data_lake_raw_bucket)
-lambda_functions = LambdaFunctionsStack(
-    app,
-    data_lake_raw=data_lake.data_lake_raw_bucket,
-    data_lake_processed=data_lake.data_lake_processed_bucket,
-)
-glue_catalog = GlueCatalogStack(
-    app,
-    data_lake_raw=data_lake.data_lake_raw_bucket,
-    data_lake_processed=data_lake.data_lake_processed_bucket,
-)
+# kinesis = KinesisStack(app, data_lake_raw_bucket=data_lake.data_lake_raw_bucket)
+# lambda_functions = LambdaFunctionsStack(
+#     app,
+#     data_lake_raw=data_lake.data_lake_raw_bucket,
+#     data_lake_processed=data_lake.data_lake_processed_bucket,
+# )
+# glue_catalog = GlueCatalogStack(
+#     app,
+#     data_lake_raw=data_lake.data_lake_raw_bucket,
+#     data_lake_processed=data_lake.data_lake_processed_bucket,
+# )
 # athena_stack = AthenaStack(app)
 rds_aurora = RdsStack(
     app,
@@ -31,10 +31,10 @@ rds_aurora = RdsStack(
     data_lake_processed=data_lake.data_lake_processed_bucket,
     common_stack=common_stack,
 )
-redshift = RedshiftStack(
-    app,
-    data_lake_raw=data_lake.data_lake_raw_bucket,
-    data_lake_processed=data_lake.data_lake_processed_bucket,
-    common_stack=common_stack,
-)
+# redshift = RedshiftStack(
+#     app,
+#     data_lake_raw=data_lake.data_lake_raw_bucket,
+#     data_lake_processed=data_lake.data_lake_processed_bucket,
+#     common_stack=common_stack,
+# )
 app.synth()
