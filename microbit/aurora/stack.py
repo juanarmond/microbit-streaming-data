@@ -72,14 +72,14 @@ class RdsStack(core.Stack):
         self.data_lake_processed = data_lake_processed
         super().__init__(scope, id=f"{self.deploy_env.value}-rds-aurora-stack", **kwargs)
 
-        # import_bucket = self.data_lake_processed
+        import_bucket = self.data_lake_processed
         # export_bucket = s3.Bucket(self, "exportbucket")
         self.aurora_sg = ec2.SecurityGroup(
             self,
-            f"redshift-{self.deploy_env.value}-sg",
+            f"aurora-{self.deploy_env.value}-sg",
             vpc=self.common_stack.custom_vpc,
             allow_all_outbound=True,
-            security_group_name=f"redshift-{self.deploy_env.value}-sg",
+            security_group_name=f"aurora-{self.deploy_env.value}-sg",
         )
 
         self.aurora_sg.add_ingress_rule(
@@ -89,25 +89,32 @@ class RdsStack(core.Stack):
         for subnet in self.common_stack.custom_vpc.private_subnets:
             self.aurora_sg.add_ingress_rule(
                 peer=ec2.Peer.ipv4(subnet.ipv4_cidr_block),
-                connection=ec2.Port.tcp(5439),
+                connection=ec2.Port.tcp(3306),
             )
 
-        cluster = rds.DatabaseCluster(self, "microbit_aurora",
-                                      engine=rds.DatabaseClusterEngine.aurora_mysql(
-                                          version=rds.AuroraMysqlEngineVersion.VER_2_08_1),
-                                      # credentials=rds.Credentials.from_generated_secret("clusteradmin"),
-                                      # Optional - will default to 'admin' username and generated password
-                                      instance_props=rds.InstanceProps(
-                                          # optional , defaults to t3.medium
-                                          instance_type=ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2,
-                                                                            ec2.InstanceSize.SMALL),
-                                          vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
-                                          vpc=self.common_stack.custom_vpc,
-                                        security_groups=[self.aurora_sg]),
-                                      # s3_import_buckets=[import_bucket],
-                                      s3_import_role=RDSRole(self, self.data_lake_raw, self.data_lake_processed)
-                                      # s3_export_buckets = [export_bucket]
-                                      )
+        cluster = rds.DatabaseCluster(
+            self,
+            f"microbit-{self.deploy_env.value}-aurora",
+            default_database_name="microbit_aurora",
+            engine=rds.DatabaseClusterEngine.aurora_mysql(
+                version=rds.AuroraMysqlEngineVersion.VER_2_08_1
+            ),
+            cluster_identifier=f"microbit-{self.deploy_env.value}-aurora-cluster",
+            instance_identifier_base=f"microbit-{self.deploy_env.value}-aurora-instance",
+            # credentials=rds.Credentials.from_generated_secret("clusteradmin"),
+            # Optional - will default to 'admin' username and generated password
+            instance_props=rds.InstanceProps(
+                # optional , defaults to t3.medium
+                instance_type=ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2,
+                                                  ec2.InstanceSize.SMALL),
+                vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
+                vpc=self.common_stack.custom_vpc,
+                security_groups=[self.aurora_sg]
+                ),
+            s3_import_buckets=[import_bucket],
+            s3_import_role=RDSRole(self, self.data_lake_raw, self.data_lake_processed)
+            # s3_export_buckets = [export_bucket]
+        )
 
         # instance = rds.DatabaseInstance(self, "Instance",
         #                                 engine=rds.DatabaseInstanceEngine.oracle_se2(
