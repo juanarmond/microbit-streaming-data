@@ -97,7 +97,7 @@ class RdsStack(core.Stack):
             f"microbit-{self.deploy_env.value}-aurora",
             default_database_name="microbit_aurora",
             engine=rds.DatabaseClusterEngine.aurora_postgres(
-                version=rds.AuroraPostgresEngineVersion.VER_12_8
+                version=rds.AuroraPostgresEngineVersion.VER_12_4
             ),
             cluster_identifier=f"microbit-{self.deploy_env.value}-aurora-cluster",
             instance_identifier_base=f"microbit-{self.deploy_env.value}-aurora-instance",
