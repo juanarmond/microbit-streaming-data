@@ -72,7 +72,7 @@ class RdsStack(core.Stack):
         self.data_lake_processed = data_lake_processed
         super().__init__(scope, id=f"{self.deploy_env.value}-rds-aurora-stack", **kwargs)
 
-        import_bucket = self.data_lake_processed
+        # import_bucket = self.data_lake_processed
         # export_bucket = s3.Bucket(self, "exportbucket")
         self.aurora_sg = ec2.SecurityGroup(
             self,
@@ -96,8 +96,8 @@ class RdsStack(core.Stack):
             self,
             f"microbit-{self.deploy_env.value}-aurora",
             default_database_name="microbit_aurora",
-            engine=rds.DatabaseClusterEngine.aurora_mysql(
-                version=rds.AuroraMysqlEngineVersion.VER_2_08_1
+            engine=rds.DatabaseClusterEngine.aurora_postgres(
+                version=rds.AuroraPostgresEngineVersion.VER_10_11
             ),
             cluster_identifier=f"microbit-{self.deploy_env.value}-aurora-cluster",
             instance_identifier_base=f"microbit-{self.deploy_env.value}-aurora-instance",
@@ -111,8 +111,8 @@ class RdsStack(core.Stack):
                 vpc=self.common_stack.custom_vpc,
                 security_groups=[self.aurora_sg]
                 ),
-            s3_import_buckets=[import_bucket],
-            # s3_import_role=RDSRole(self, self.data_lake_raw, self.data_lake_processed)
+            # s3_import_buckets=[import_bucket],
+            s3_import_role=RDSRole(self, self.data_lake_raw, self.data_lake_processed)
             # s3_export_buckets = [export_bucket]
         )
 
