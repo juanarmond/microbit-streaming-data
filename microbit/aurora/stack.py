@@ -97,7 +97,7 @@ class RdsStack(core.Stack):
             f"microbit-{self.deploy_env.value}-aurora",
             default_database_name="microbit_aurora",
             engine=rds.DatabaseClusterEngine.aurora_postgres(
-                version=rds.AuroraPostgresEngineVersion.VER_10_11
+                version=rds.AuroraPostgresEngineVersion.VER_13_4
             ),
             cluster_identifier=f"microbit-{self.deploy_env.value}-aurora-cluster",
             instance_identifier_base=f"microbit-{self.deploy_env.value}-aurora-instance",
@@ -106,7 +106,7 @@ class RdsStack(core.Stack):
             instance_props=rds.InstanceProps(
                 # optional , defaults to t3.medium
                 instance_type=ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2,
-                                                  ec2.InstanceSize.SMALL),
+                                                  ec2.InstanceSize.MEIUM),
                 vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
                 vpc=self.common_stack.custom_vpc,
                 security_groups=[self.aurora_sg]
