@@ -83,7 +83,7 @@ class RdsStack(core.Stack):
         )
 
         self.aurora_sg.add_ingress_rule(
-            peer=ec2.Peer.ipv4("0.0.0.0/0"), connection=ec2.Port.tcp(5439)
+            peer=ec2.Peer.ipv4("0.0.0.0/0"), connection=ec2.Port.tcp(3306)
         )
 
         for subnet in self.common_stack.custom_vpc.private_subnets:
