@@ -106,7 +106,7 @@ class RdsStack(core.Stack):
             instance_props=rds.InstanceProps(
                 # optional , defaults to t3.medium
                 instance_type=ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2,
-                                                  ec2.InstanceSize.MEIUM),
+                                                  ec2.InstanceSize.MEDIUM),
                 vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
                 vpc=self.common_stack.custom_vpc,
                 security_groups=[self.aurora_sg]
