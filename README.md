@@ -88,7 +88,6 @@ These are the AWS services used and a why I am using it.
     * Glue Data Catalog - it indexes and creates the database schema.
 * Athena - is an interactive query service that analyze data by connecting to Glue Data Catalog to store and retrieve
   table metadata from the Amazon S3 data.
-* Amazon Aurora - it stores the processed data as a relational database.
 * Redshit - gets the schema and catalog from Glue and uses Athena to read the data from S3.
   * To create the scheme for Redshift
       ```
@@ -165,6 +164,4 @@ $ pip install -r requirements.txt
 ## CI/CD
 
 This repo uses GitHub Actions for CI/CD.
-
-## Results
 
