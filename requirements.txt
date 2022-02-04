@@ -4,6 +4,11 @@ pyserial
 black
 boto3
 aws_cdk.aws_s3
+aws_cdk.aws_s3_notifications
 aws_cdk.aws_iam
 aws_cdk.aws_kinesisfirehose
-
+aws_cdk.aws_lambda
+aws_cdk.aws_glue
+aws_cdk.aws_redshift
+aws_cdk.aws_athena
+aws_cdk.aws_rds

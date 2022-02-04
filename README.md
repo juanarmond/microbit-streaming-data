@@ -1,71 +1,167 @@
-# Micro:Bit Streaming Events
+# Micro:Bit Streaming Data
 
-# Deployment
-## Initially:
-1) Create
+![](images/result.png)
 
-## After:
-1) Make sure the env vars are present in github settings look at deploy.yaml where they are used:
- - AWS_ACCESS_KEY_ID
- - AWS_SECRET_ACCESS_KEY
- - AWS_DEFAULT_REGION
-2) make deploy
+## Objective
 
+I will learn how to assemble and how to capture and stream all real-time data into AWS. Also, I want to use this data to
+create a visual data exploration.
 
-# Welcome to your CDK Python project!
+## Description
 
-This is a blank project for Python development with CDK.
+Using the BBC micro:bit too built an autonomous car and another micro:bit to be a receiver to capture all raw data
+generated from the gyroscope, proximity sensor, line follow sensor, power consumption, velocity and more. These raw data
+will be streamed into AWS to explore and visualize. The result screenshots will be at the end.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Microbit
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
+The BBC micro:bit is a pocket-sized computer that introduces you to how software and hardware work together. It has an
+LED light display, buttons, sensors and many input/output features that you can program and physically interact with.
 
-To manually create a virtualenv on MacOS and Linux:
+![](images/microbit.png)
+
+## Car
+
+The car is equipped with two bi-directional DC motors with variable speed control, light, buzzer, obstacle detection and
+avoidance, line follow sensor, pen hole to draw, battery holders for 4x AA batteries and an onboard edge connector for
+the micro:bit.
+
+![](images/car.jpg)
+
+## Data
+
+These are all the data collected and transmitted to be ingested into AWS S3 a in a JSON format.
+
+* Device Serial Number
+* Time
+* Acceleration (mg) X
+* Acceleration (mg) Y
+* Acceleration (mg) Z
+* Tembo
+* Temperature (°C)
+* Distance Sensor
+* Light Level
+* Sound Level
+* Compass Heading (°)
+* Magnetic Force (µT) X
+* Magnetic Force (µT) Y
+* Magnetic Force (µT) Z
+* Magnetic Force (µT) Strength
+* Line Sensor (Left)
+* Line Sensor (Right)
+* Millivolts
+* Total time in seconds
+
+### JSON Example
 
 ```
+{'event_timestamp': 1637930336.545796, 'time': 1968, 'signal': -49, 'key': 'carSN', 'value': -1216136376}
+{'event_timestamp': 1637930340.877306, 'time': 4061, 'signal': -50, 'key': 'a.x', 'value': -116}
+{'event_timestamp': 1637930344.877306, 'time':9061, 'serial':-1216136376, 'sigal':-52, 'key':'a.y', 'value':1044}
+{'event_timestamp': 1637930347.969918, 'time': 14057, 'signal': -54, 'key': 'a.z', 'value': 84}
+{'event_timestamp': 1637930352.963717, 'time': 19057, 'serial': -126136376, 'signal': -55, 'key': 'tembo', 'value': 120}
+{'event_timestamp': 1637930357.963863, 'time': 24045, 'signal': -55, 'key': 'temp', 'value': 23}
+{'event_timestamp': 1637930362.950302, 'time': 29013, 'signal': -54, 'key': 'dist', 'value': 11}
+{'event_timestamp': 1637930367.923427, 'time': 33977, 'signal': -54, 'key': 'light', 'value': 51}
+{'event_timestamp': 1637930372.883084, 'time': 38969, 'signal': -54, 'key': 'sound', 'value': 0}
+{'event_timestamp': 1637930377.877778, 'time': 43929, 'serial': -121613376, 'signal': -53, 'key': 'compass', 'value': 93}
+{'event_timestamp': 1637930382.835778, 'time': 48897, 'signal': -54, 'key': 'mag.x', 'value': -126.892}
+{'event_timestamp': 1637930387.804328, 'time': 53845, 'signal': -54, 'key': 'mag.y', 'value': -280.234}
+{'event_timestamp': 1637930392.751032, 'time': 58797, 'signal': -47, 'key': 'mag.z', 'value': -95.765}
+{'event_timestamp': 1637930397.70565, 'time': 63741, 'signal': -46, 'key': 'mag.str', 'value': 322.185}
+{'event_timestamp': 1637930402.650304, 'time': 68709, 'signal': -46, 'key': 'left', 'value': 243}
+{'event_timestamp': 1637930407.650304, 'time':73665, 'serial':-1216136376, 'signal':-51, 'key':'right', 'value'165}'
+{'event_timestamp': 1637930412.575524, 'time': 78613, 'signal': -51, 'key': 'm.volts', 'value': 102.941176470588}
+{'event_timestamp': 1637930417.524824, 'time': 81537, 'signal': -51, 'key': 'seconds', 'value': 21.537}
+```
+
+## AWS Cloud Services
+
+These are the AWS services used and a why I am using it.
+
+* Kinesis Data Firehose - stream the real-time data into Amazon S3.
+* S3 - it stores the real-time data to be used.
+* Lambda Function - every time a new data arrives in the raw data lake, it triggers the lambda function to check and
+  clean the data if necessary and move it to the processed data lake.
+* Glue
+    * Crawler - it is a cron schedule that is set to every 5 minutes populate the Glue Data Catalog with tables
+    * Glue Data Catalog - it indexes and creates the database schema.
+* Athena - is an interactive query service that analyze data by connecting to Glue Data Catalog to store and retrieve
+  table metadata from the Amazon S3 data.
+* Redshit - gets the schema and catalog from Glue and uses Athena to read the data from S3.
+  * To create the scheme for Redshift
+      ```
+      CREATE EXTERNAL SCHEMA data_lake_processed
+      FROM DATA CATALOG
+      DATABASE 'glue_microbit_develop_data_lake_processed'
+      REGION 'eu-west-2'
+      IAM_ROLE 'arn:aws:iam::********:role/develop-redshift-stack-iamdevelopredshiftspectrumr-*****'
+    
+      CREATE EXTERNAL SCHEMA data_lake_raw
+      FROM DATA CATALOG
+      DATABASE 'glue_microbit_develop_data_lake_raw'
+      REGION 'eu-west-2'
+      IAM_ROLE 'arn:aws:iam::********:role/develop-redshift-stack-iamdevelopredshiftspectrumr-*****
+      ```
+
+## Installation
+
+### Requirements:
+
+1) Setup your IAM User credentials
+
+- ```~/.aws/config```
+
+```
+   [profile my_aws_profile]
+   region = us-east-1
+   output = yaml
+```
+
+- ```~/.aws/credentials```
+
+```
+   [profile my_aws_profile]
+   aws_access_key_id = <my_access_key_id> 
+   aws_secret_access_key = <my_secret_access_key>
+ ```
+
+2) Manually create a virtualenv on MacOS and Linux
+
+```shell script
 $ python3 -m venv .venv
 ```
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+3) After the init process completes and the virtualenv is created, you can use the following step to activate your
+   virtualenv.
 
-```
+```shell script
 $ source .venv/bin/activate
 ```
 
-If you are a Windows platform, you would activate the virtualenv like this:
+4) Once the virtualenv is activated, you can install the required dependencies.
 
-```
-% .venv\Scripts\activate.bat
-```
-
-Once the virtualenv is activated, you can install the required dependencies.
-
-```
+```shell script
 $ pip install -r requirements.txt
 ```
 
-At this point you can now synthesize the CloudFormation template for this code.
+5) Microbit Files Inside the folder microbit_files contains the code for the autonomous car and the receiver. Please go
+   to the https://makecode.microbit.org/ follow the instruction to connect the microbit. Then copy and past the code to
+   download to each microbit.
 
-```
-$ cdk synth
-```
+![](images/makecode.png)
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
+### Environment Secrets:
 
-## Useful commands
+1) Make sure the env vars are present in GitHub settings look at deploy.yaml where they are used:
 
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
+- **AWS_ACCESS_KEY_ID**
+- **AWS_SECRET_ACCESS_KEY**
+- **AWS_DEFAULT_REGION**
 
-Enjoy!
+2) Make deploy
+
+## CI/CD
+
+This repo uses GitHub Actions for CI/CD.
+
